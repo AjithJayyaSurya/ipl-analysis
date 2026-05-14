@@ -1,0 +1,1262 @@
+{
+  "2008": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "SE Marsh",
+        "runs": 616,
+        "matches": 441,
+        "strike_rate": 139.68
+      },
+      {
+        "rank": 2,
+        "name": "G Gambhir",
+        "runs": 534,
+        "matches": 379,
+        "strike_rate": 140.9
+      },
+      {
+        "rank": 3,
+        "name": "ST Jayasuriya",
+        "runs": 514,
+        "matches": 309,
+        "strike_rate": 166.34
+      },
+      {
+        "rank": 4,
+        "name": "SR Watson",
+        "runs": 472,
+        "matches": 311,
+        "strike_rate": 151.77
+      },
+      {
+        "rank": 5,
+        "name": "GC Smith",
+        "runs": 441,
+        "matches": 362,
+        "strike_rate": 121.82
+      },
+      {
+        "rank": 6,
+        "name": "AC Gilchrist",
+        "runs": 436,
+        "matches": 318,
+        "strike_rate": 137.11
+      },
+      {
+        "rank": 7,
+        "name": "YK Pathan",
+        "runs": 435,
+        "matches": 243,
+        "strike_rate": 179.01
+      },
+      {
+        "rank": 8,
+        "name": "SK Raina",
+        "runs": 421,
+        "matches": 295,
+        "strike_rate": 142.71
+      },
+      {
+        "rank": 9,
+        "name": "MS Dhoni",
+        "runs": 414,
+        "matches": 310,
+        "strike_rate": 133.55
+      },
+      {
+        "rank": 10,
+        "name": "V Sehwag",
+        "runs": 406,
+        "matches": 220,
+        "strike_rate": 184.55
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "Sohail Tanvir",
+        "wickets": 24
+      },
+      {
+        "rank": 2,
+        "name": "JA Morkel",
+        "wickets": 20
+      },
+      {
+        "rank": 3,
+        "name": "IK Pathan",
+        "wickets": 20
+      },
+      {
+        "rank": 4,
+        "name": "SK Warne",
+        "wickets": 20
+      },
+      {
+        "rank": 5,
+        "name": "SR Watson",
+        "wickets": 20
+      },
+      {
+        "rank": 6,
+        "name": "S Sreesanth",
+        "wickets": 19
+      },
+      {
+        "rank": 7,
+        "name": "MF Maharoof",
+        "wickets": 19
+      },
+      {
+        "rank": 8,
+        "name": "PP Chawla",
+        "wickets": 19
+      },
+      {
+        "rank": 9,
+        "name": "MS Gony",
+        "wickets": 18
+      },
+      {
+        "rank": 10,
+        "name": "VY Mahesh",
+        "wickets": 17
+      }
+    ]
+  },
+  "2009": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "ML Hayden",
+        "runs": 572,
+        "matches": 395,
+        "strike_rate": 144.81
+      },
+      {
+        "rank": 2,
+        "name": "AC Gilchrist",
+        "runs": 495,
+        "matches": 325,
+        "strike_rate": 152.31
+      },
+      {
+        "rank": 3,
+        "name": "AB de Villiers",
+        "runs": 465,
+        "matches": 355,
+        "strike_rate": 130.99
+      },
+      {
+        "rank": 4,
+        "name": "SK Raina",
+        "runs": 434,
+        "matches": 308,
+        "strike_rate": 140.91
+      },
+      {
+        "rank": 5,
+        "name": "TM Dilshan",
+        "runs": 418,
+        "matches": 341,
+        "strike_rate": 122.58
+      },
+      {
+        "rank": 6,
+        "name": "JP Duminy",
+        "runs": 372,
+        "matches": 325,
+        "strike_rate": 114.46
+      },
+      {
+        "rank": 7,
+        "name": "HH Gibbs",
+        "runs": 371,
+        "matches": 331,
+        "strike_rate": 112.08
+      },
+      {
+        "rank": 8,
+        "name": "BJ Hodge",
+        "runs": 365,
+        "matches": 310,
+        "strike_rate": 117.74
+      },
+      {
+        "rank": 9,
+        "name": "SR Tendulkar",
+        "runs": 364,
+        "matches": 303,
+        "strike_rate": 120.13
+      },
+      {
+        "rank": 10,
+        "name": "RG Sharma",
+        "runs": 362,
+        "matches": 315,
+        "strike_rate": 114.92
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "RP Singh",
+        "wickets": 26
+      },
+      {
+        "rank": 2,
+        "name": "A Nehra",
+        "wickets": 22
+      },
+      {
+        "rank": 3,
+        "name": "A Kumble",
+        "wickets": 22
+      },
+      {
+        "rank": 4,
+        "name": "PP Ojha",
+        "wickets": 21
+      },
+      {
+        "rank": 5,
+        "name": "SL Malinga",
+        "wickets": 21
+      },
+      {
+        "rank": 6,
+        "name": "IK Pathan",
+        "wickets": 20
+      },
+      {
+        "rank": 7,
+        "name": "DP Nannes",
+        "wickets": 20
+      },
+      {
+        "rank": 8,
+        "name": "PJ Sangwan",
+        "wickets": 18
+      },
+      {
+        "rank": 9,
+        "name": "MM Patel",
+        "wickets": 18
+      },
+      {
+        "rank": 10,
+        "name": "M Muralitharan",
+        "wickets": 16
+      }
+    ]
+  },
+  "2010": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "SR Tendulkar",
+        "runs": 618,
+        "matches": 466,
+        "strike_rate": 132.62
+      },
+      {
+        "rank": 2,
+        "name": "JH Kallis",
+        "runs": 572,
+        "matches": 494,
+        "strike_rate": 115.79
+      },
+      {
+        "rank": 3,
+        "name": "SK Raina",
+        "runs": 520,
+        "matches": 364,
+        "strike_rate": 142.86
+      },
+      {
+        "rank": 4,
+        "name": "SC Ganguly",
+        "runs": 493,
+        "matches": 419,
+        "strike_rate": 117.66
+      },
+      {
+        "rank": 5,
+        "name": "M Vijay",
+        "runs": 458,
+        "matches": 292,
+        "strike_rate": 156.85
+      },
+      {
+        "rank": 6,
+        "name": "DPMD Jayawardene",
+        "runs": 439,
+        "matches": 298,
+        "strike_rate": 147.32
+      },
+      {
+        "rank": 7,
+        "name": "A Symonds",
+        "runs": 429,
+        "matches": 341,
+        "strike_rate": 125.81
+      },
+      {
+        "rank": 8,
+        "name": "SS Tiwary",
+        "runs": 419,
+        "matches": 309,
+        "strike_rate": 135.6
+      },
+      {
+        "rank": 9,
+        "name": "RG Sharma",
+        "runs": 404,
+        "matches": 302,
+        "strike_rate": 133.77
+      },
+      {
+        "rank": 10,
+        "name": "NV Ojha",
+        "runs": 377,
+        "matches": 285,
+        "strike_rate": 132.28
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "PP Ojha",
+        "wickets": 22
+      },
+      {
+        "rank": 2,
+        "name": "A Mishra",
+        "wickets": 20
+      },
+      {
+        "rank": 3,
+        "name": "Harbhajan Singh",
+        "wickets": 20
+      },
+      {
+        "rank": 4,
+        "name": "A Kumble",
+        "wickets": 19
+      },
+      {
+        "rank": 5,
+        "name": "R Vinay Kumar",
+        "wickets": 19
+      },
+      {
+        "rank": 6,
+        "name": "Z Khan",
+        "wickets": 18
+      },
+      {
+        "rank": 7,
+        "name": "KA Pollard",
+        "wickets": 17
+      },
+      {
+        "rank": 8,
+        "name": "DW Steyn",
+        "wickets": 17
+      },
+      {
+        "rank": 9,
+        "name": "IK Pathan",
+        "wickets": 17
+      },
+      {
+        "rank": 10,
+        "name": "SL Malinga",
+        "wickets": 17
+      }
+    ]
+  },
+  "2011": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "CH Gayle",
+        "runs": 608,
+        "matches": 332,
+        "strike_rate": 183.13
+      },
+      {
+        "rank": 2,
+        "name": "V Kohli",
+        "runs": 557,
+        "matches": 460,
+        "strike_rate": 121.09
+      },
+      {
+        "rank": 3,
+        "name": "SR Tendulkar",
+        "runs": 553,
+        "matches": 488,
+        "strike_rate": 113.32
+      },
+      {
+        "rank": 4,
+        "name": "SE Marsh",
+        "runs": 504,
+        "matches": 344,
+        "strike_rate": 146.51
+      },
+      {
+        "rank": 5,
+        "name": "MEK Hussey",
+        "runs": 492,
+        "matches": 414,
+        "strike_rate": 118.84
+      },
+      {
+        "rank": 6,
+        "name": "PC Valthaty",
+        "runs": 463,
+        "matches": 338,
+        "strike_rate": 136.98
+      },
+      {
+        "rank": 7,
+        "name": "SK Raina",
+        "runs": 438,
+        "matches": 325,
+        "strike_rate": 134.77
+      },
+      {
+        "rank": 8,
+        "name": "M Vijay",
+        "runs": 434,
+        "matches": 339,
+        "strike_rate": 128.02
+      },
+      {
+        "rank": 9,
+        "name": "JH Kallis",
+        "runs": 424,
+        "matches": 378,
+        "strike_rate": 112.17
+      },
+      {
+        "rank": 10,
+        "name": "V Sehwag",
+        "runs": 424,
+        "matches": 240,
+        "strike_rate": 176.67
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "SL Malinga",
+        "wickets": 30
+      },
+      {
+        "rank": 2,
+        "name": "MM Patel",
+        "wickets": 22
+      },
+      {
+        "rank": 3,
+        "name": "S Aravind",
+        "wickets": 22
+      },
+      {
+        "rank": 4,
+        "name": "R Ashwin",
+        "wickets": 21
+      },
+      {
+        "rank": 5,
+        "name": "DE Bollinger",
+        "wickets": 20
+      },
+      {
+        "rank": 6,
+        "name": "A Mishra",
+        "wickets": 19
+      },
+      {
+        "rank": 7,
+        "name": "Iqbal Abdulla",
+        "wickets": 18
+      },
+      {
+        "rank": 8,
+        "name": "RJ Harris",
+        "wickets": 17
+      },
+      {
+        "rank": 9,
+        "name": "R Sharma",
+        "wickets": 17
+      },
+      {
+        "rank": 10,
+        "name": "R Vinay Kumar",
+        "wickets": 17
+      }
+    ]
+  },
+  "2012": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "CH Gayle",
+        "runs": 733,
+        "matches": 456,
+        "strike_rate": 160.75
+      },
+      {
+        "rank": 2,
+        "name": "G Gambhir",
+        "runs": 590,
+        "matches": 411,
+        "strike_rate": 143.55
+      },
+      {
+        "rank": 3,
+        "name": "S Dhawan",
+        "runs": 569,
+        "matches": 439,
+        "strike_rate": 129.61
+      },
+      {
+        "rank": 4,
+        "name": "AM Rahane",
+        "runs": 560,
+        "matches": 433,
+        "strike_rate": 129.33
+      },
+      {
+        "rank": 5,
+        "name": "V Sehwag",
+        "runs": 495,
+        "matches": 307,
+        "strike_rate": 161.24
+      },
+      {
+        "rank": 6,
+        "name": "CL White",
+        "runs": 479,
+        "matches": 320,
+        "strike_rate": 149.69
+      },
+      {
+        "rank": 7,
+        "name": "R Dravid",
+        "runs": 462,
+        "matches": 412,
+        "strike_rate": 112.14
+      },
+      {
+        "rank": 8,
+        "name": "SK Raina",
+        "runs": 441,
+        "matches": 325,
+        "strike_rate": 135.69
+      },
+      {
+        "rank": 9,
+        "name": "RG Sharma",
+        "runs": 433,
+        "matches": 342,
+        "strike_rate": 126.61
+      },
+      {
+        "rank": 10,
+        "name": "Mandeep Singh",
+        "runs": 432,
+        "matches": 342,
+        "strike_rate": 126.32
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "M Morkel",
+        "wickets": 30
+      },
+      {
+        "rank": 2,
+        "name": "SP Narine",
+        "wickets": 29
+      },
+      {
+        "rank": 3,
+        "name": "SL Malinga",
+        "wickets": 25
+      },
+      {
+        "rank": 4,
+        "name": "UT Yadav",
+        "wickets": 22
+      },
+      {
+        "rank": 5,
+        "name": "Z Khan",
+        "wickets": 21
+      },
+      {
+        "rank": 6,
+        "name": "R Vinay Kumar",
+        "wickets": 21
+      },
+      {
+        "rank": 7,
+        "name": "DJ Bravo",
+        "wickets": 20
+      },
+      {
+        "rank": 8,
+        "name": "R Ashwin",
+        "wickets": 19
+      },
+      {
+        "rank": 9,
+        "name": "KA Pollard",
+        "wickets": 18
+      },
+      {
+        "rank": 10,
+        "name": "DW Steyn",
+        "wickets": 18
+      }
+    ]
+  },
+  "2013": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "MEK Hussey",
+        "runs": 733,
+        "matches": 566,
+        "strike_rate": 129.51
+      },
+      {
+        "rank": 2,
+        "name": "CH Gayle",
+        "runs": 708,
+        "matches": 453,
+        "strike_rate": 156.29
+      },
+      {
+        "rank": 3,
+        "name": "V Kohli",
+        "runs": 634,
+        "matches": 457,
+        "strike_rate": 138.73
+      },
+      {
+        "rank": 4,
+        "name": "SK Raina",
+        "runs": 548,
+        "matches": 365,
+        "strike_rate": 150.14
+      },
+      {
+        "rank": 5,
+        "name": "SR Watson",
+        "runs": 543,
+        "matches": 380,
+        "strike_rate": 142.89
+      },
+      {
+        "rank": 6,
+        "name": "RG Sharma",
+        "runs": 538,
+        "matches": 409,
+        "strike_rate": 131.54
+      },
+      {
+        "rank": 7,
+        "name": "KD Karthik",
+        "runs": 510,
+        "matches": 411,
+        "strike_rate": 124.09
+      },
+      {
+        "rank": 8,
+        "name": "AM Rahane",
+        "runs": 488,
+        "matches": 458,
+        "strike_rate": 106.55
+      },
+      {
+        "rank": 9,
+        "name": "R Dravid",
+        "runs": 471,
+        "matches": 425,
+        "strike_rate": 110.82
+      },
+      {
+        "rank": 10,
+        "name": "MS Dhoni",
+        "runs": 461,
+        "matches": 283,
+        "strike_rate": 162.9
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "DJ Bravo",
+        "wickets": 34
+      },
+      {
+        "rank": 2,
+        "name": "JP Faulkner",
+        "wickets": 33
+      },
+      {
+        "rank": 3,
+        "name": "R Vinay Kumar",
+        "wickets": 27
+      },
+      {
+        "rank": 4,
+        "name": "SP Narine",
+        "wickets": 26
+      },
+      {
+        "rank": 5,
+        "name": "Harbhajan Singh",
+        "wickets": 25
+      },
+      {
+        "rank": 6,
+        "name": "A Mishra",
+        "wickets": 24
+      },
+      {
+        "rank": 7,
+        "name": "MG Johnson",
+        "wickets": 24
+      },
+      {
+        "rank": 8,
+        "name": "SL Malinga",
+        "wickets": 23
+      },
+      {
+        "rank": 9,
+        "name": "KK Cooper",
+        "wickets": 22
+      },
+      {
+        "rank": 10,
+        "name": "NLTC Perera",
+        "wickets": 21
+      }
+    ]
+  },
+  "2014": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "RV Uthappa",
+        "runs": 660,
+        "matches": 479,
+        "strike_rate": 137.79
+      },
+      {
+        "rank": 2,
+        "name": "DR Smith",
+        "runs": 566,
+        "matches": 416,
+        "strike_rate": 136.06
+      },
+      {
+        "rank": 3,
+        "name": "GJ Maxwell",
+        "runs": 552,
+        "matches": 294,
+        "strike_rate": 187.76
+      },
+      {
+        "rank": 4,
+        "name": "DA Warner",
+        "runs": 528,
+        "matches": 375,
+        "strike_rate": 140.8
+      },
+      {
+        "rank": 5,
+        "name": "SK Raina",
+        "runs": 523,
+        "matches": 359,
+        "strike_rate": 145.68
+      },
+      {
+        "rank": 6,
+        "name": "V Sehwag",
+        "runs": 455,
+        "matches": 315,
+        "strike_rate": 144.44
+      },
+      {
+        "rank": 7,
+        "name": "DA Miller",
+        "runs": 446,
+        "matches": 299,
+        "strike_rate": 149.16
+      },
+      {
+        "rank": 8,
+        "name": "JP Duminy",
+        "runs": 410,
+        "matches": 305,
+        "strike_rate": 134.43
+      },
+      {
+        "rank": 9,
+        "name": "BB McCullum",
+        "runs": 405,
+        "matches": 333,
+        "strike_rate": 121.62
+      },
+      {
+        "rank": 10,
+        "name": "MK Pandey",
+        "runs": 401,
+        "matches": 340,
+        "strike_rate": 117.94
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "MM Sharma",
+        "wickets": 26
+      },
+      {
+        "rank": 2,
+        "name": "SP Narine",
+        "wickets": 22
+      },
+      {
+        "rank": 3,
+        "name": "B Kumar",
+        "wickets": 21
+      },
+      {
+        "rank": 4,
+        "name": "RA Jadeja",
+        "wickets": 20
+      },
+      {
+        "rank": 5,
+        "name": "Sandeep Sharma",
+        "wickets": 19
+      },
+      {
+        "rank": 6,
+        "name": "AR Patel",
+        "wickets": 19
+      },
+      {
+        "rank": 7,
+        "name": "R Ashwin",
+        "wickets": 17
+      },
+      {
+        "rank": 8,
+        "name": "MG Johnson",
+        "wickets": 17
+      },
+      {
+        "rank": 9,
+        "name": "MA Starc",
+        "wickets": 17
+      },
+      {
+        "rank": 10,
+        "name": "KV Sharma",
+        "wickets": 17
+      }
+    ]
+  },
+  "2015": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "DA Warner",
+        "runs": 562,
+        "matches": 359,
+        "strike_rate": 156.55
+      },
+      {
+        "rank": 2,
+        "name": "AM Rahane",
+        "runs": 540,
+        "matches": 413,
+        "strike_rate": 130.75
+      },
+      {
+        "rank": 3,
+        "name": "LMP Simmons",
+        "runs": 540,
+        "matches": 441,
+        "strike_rate": 122.45
+      },
+      {
+        "rank": 4,
+        "name": "AB de Villiers",
+        "runs": 513,
+        "matches": 293,
+        "strike_rate": 175.09
+      },
+      {
+        "rank": 5,
+        "name": "V Kohli",
+        "runs": 505,
+        "matches": 386,
+        "strike_rate": 130.83
+      },
+      {
+        "rank": 6,
+        "name": "CH Gayle",
+        "runs": 491,
+        "matches": 333,
+        "strike_rate": 147.45
+      },
+      {
+        "rank": 7,
+        "name": "RG Sharma",
+        "runs": 482,
+        "matches": 333,
+        "strike_rate": 144.74
+      },
+      {
+        "rank": 8,
+        "name": "SS Iyer",
+        "runs": 439,
+        "matches": 342,
+        "strike_rate": 128.36
+      },
+      {
+        "rank": 9,
+        "name": "BB McCullum",
+        "runs": 436,
+        "matches": 280,
+        "strike_rate": 155.71
+      },
+      {
+        "rank": 10,
+        "name": "KA Pollard",
+        "runs": 419,
+        "matches": 256,
+        "strike_rate": 163.67
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "DJ Bravo",
+        "wickets": 28
+      },
+      {
+        "rank": 2,
+        "name": "SL Malinga",
+        "wickets": 26
+      },
+      {
+        "rank": 3,
+        "name": "A Nehra",
+        "wickets": 25
+      },
+      {
+        "rank": 4,
+        "name": "YS Chahal",
+        "wickets": 24
+      },
+      {
+        "rank": 5,
+        "name": "MA Starc",
+        "wickets": 22
+      },
+      {
+        "rank": 6,
+        "name": "HV Patel",
+        "wickets": 19
+      },
+      {
+        "rank": 7,
+        "name": "B Kumar",
+        "wickets": 19
+      },
+      {
+        "rank": 8,
+        "name": "Harbhajan Singh",
+        "wickets": 19
+      },
+      {
+        "rank": 9,
+        "name": "MJ McClenaghan",
+        "wickets": 18
+      },
+      {
+        "rank": 10,
+        "name": "D Wiese",
+        "wickets": 17
+      }
+    ]
+  },
+  "2016": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "V Kohli",
+        "runs": 973,
+        "matches": 640,
+        "strike_rate": 152.03
+      },
+      {
+        "rank": 2,
+        "name": "DA Warner",
+        "runs": 848,
+        "matches": 560,
+        "strike_rate": 151.43
+      },
+      {
+        "rank": 3,
+        "name": "AB de Villiers",
+        "runs": 687,
+        "matches": 407,
+        "strike_rate": 168.8
+      },
+      {
+        "rank": 4,
+        "name": "G Gambhir",
+        "runs": 501,
+        "matches": 411,
+        "strike_rate": 121.9
+      },
+      {
+        "rank": 5,
+        "name": "S Dhawan",
+        "runs": 501,
+        "matches": 429,
+        "strike_rate": 116.78
+      },
+      {
+        "rank": 6,
+        "name": "RG Sharma",
+        "runs": 489,
+        "matches": 368,
+        "strike_rate": 132.88
+      },
+      {
+        "rank": 7,
+        "name": "AM Rahane",
+        "runs": 480,
+        "matches": 379,
+        "strike_rate": 126.65
+      },
+      {
+        "rank": 8,
+        "name": "M Vijay",
+        "runs": 453,
+        "matches": 364,
+        "strike_rate": 124.45
+      },
+      {
+        "rank": 9,
+        "name": "Q de Kock",
+        "runs": 445,
+        "matches": 327,
+        "strike_rate": 136.09
+      },
+      {
+        "rank": 10,
+        "name": "SK Raina",
+        "runs": 399,
+        "matches": 312,
+        "strike_rate": 127.88
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "B Kumar",
+        "wickets": 24
+      },
+      {
+        "rank": 2,
+        "name": "SR Watson",
+        "wickets": 23
+      },
+      {
+        "rank": 3,
+        "name": "YS Chahal",
+        "wickets": 22
+      },
+      {
+        "rank": 4,
+        "name": "DS Kulkarni",
+        "wickets": 20
+      },
+      {
+        "rank": 5,
+        "name": "Sandeep Sharma",
+        "wickets": 19
+      },
+      {
+        "rank": 6,
+        "name": "Mustafizur Rahman",
+        "wickets": 19
+      },
+      {
+        "rank": 7,
+        "name": "AD Russell",
+        "wickets": 19
+      },
+      {
+        "rank": 8,
+        "name": "DJ Bravo",
+        "wickets": 19
+      },
+      {
+        "rank": 9,
+        "name": "JJ Bumrah",
+        "wickets": 18
+      },
+      {
+        "rank": 10,
+        "name": "MJ McClenaghan",
+        "wickets": 18
+      }
+    ]
+  },
+  "2017": {
+    "top_batsmen": [
+      {
+        "rank": 1,
+        "name": "DA Warner",
+        "runs": 641,
+        "matches": 452,
+        "strike_rate": 141.81
+      },
+      {
+        "rank": 2,
+        "name": "G Gambhir",
+        "runs": 498,
+        "matches": 389,
+        "strike_rate": 128.02
+      },
+      {
+        "rank": 3,
+        "name": "S Dhawan",
+        "runs": 479,
+        "matches": 376,
+        "strike_rate": 127.39
+      },
+      {
+        "rank": 4,
+        "name": "SPD Smith",
+        "runs": 472,
+        "matches": 387,
+        "strike_rate": 121.96
+      },
+      {
+        "rank": 5,
+        "name": "SK Raina",
+        "runs": 442,
+        "matches": 307,
+        "strike_rate": 143.97
+      },
+      {
+        "rank": 6,
+        "name": "HM Amla",
+        "runs": 420,
+        "matches": 288,
+        "strike_rate": 145.83
+      },
+      {
+        "rank": 7,
+        "name": "MK Pandey",
+        "runs": 396,
+        "matches": 308,
+        "strike_rate": 128.57
+      },
+      {
+        "rank": 8,
+        "name": "PA Patel",
+        "runs": 395,
+        "matches": 293,
+        "strike_rate": 134.81
+      },
+      {
+        "rank": 9,
+        "name": "RA Tripathi",
+        "runs": 391,
+        "matches": 267,
+        "strike_rate": 146.44
+      },
+      {
+        "rank": 10,
+        "name": "RV Uthappa",
+        "runs": 388,
+        "matches": 235,
+        "strike_rate": 165.11
+      }
+    ],
+    "top_bowlers": [
+      {
+        "rank": 1,
+        "name": "B Kumar",
+        "wickets": 28
+      },
+      {
+        "rank": 2,
+        "name": "JD Unadkat",
+        "wickets": 27
+      },
+      {
+        "rank": 3,
+        "name": "JJ Bumrah",
+        "wickets": 23
+      },
+      {
+        "rank": 4,
+        "name": "MJ McClenaghan",
+        "wickets": 20
+      },
+      {
+        "rank": 5,
+        "name": "Imran Tahir",
+        "wickets": 19
+      },
+      {
+        "rank": 6,
+        "name": "CR Woakes",
+        "wickets": 18
+      },
+      {
+        "rank": 7,
+        "name": "Rashid Khan",
+        "wickets": 18
+      },
+      {
+        "rank": 8,
+        "name": "UT Yadav",
+        "wickets": 18
+      },
+      {
+        "rank": 9,
+        "name": "Sandeep Sharma",
+        "wickets": 17
+      },
+      {
+        "rank": 10,
+        "name": "P Negi",
+        "wickets": 17
+      }
+    ]
+  }
+}

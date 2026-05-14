@@ -1,0 +1,83 @@
+{
+  "champions": {
+    "2008": {
+      "champion": "Rajasthan Royals",
+      "runner_up": "Chennai Super Kings",
+      "finals_mvp": "YK Pathan",
+      "final_date": "2008-06-01"
+    },
+    "2009": {
+      "champion": "Deccan Chargers",
+      "runner_up": "Royal Challengers Bangalore",
+      "finals_mvp": "A Kumble",
+      "final_date": "2009-05-24"
+    },
+    "2010": {
+      "champion": "Chennai Super Kings",
+      "runner_up": "Mumbai Indians",
+      "finals_mvp": "SK Raina",
+      "final_date": "2010-04-25"
+    },
+    "2011": {
+      "champion": "Chennai Super Kings",
+      "runner_up": "Royal Challengers Bangalore",
+      "finals_mvp": "M Vijay",
+      "final_date": "2011-05-28"
+    },
+    "2012": {
+      "champion": "Kolkata Knight Riders",
+      "runner_up": "Chennai Super Kings",
+      "finals_mvp": "MS Bisla",
+      "final_date": "2012-05-27"
+    },
+    "2013": {
+      "champion": "Mumbai Indians",
+      "runner_up": "Chennai Super Kings",
+      "finals_mvp": "KA Pollard",
+      "final_date": "2013-05-26"
+    },
+    "2014": {
+      "champion": "Kolkata Knight Riders",
+      "runner_up": "Kings XI Punjab",
+      "finals_mvp": "MK Pandey",
+      "final_date": "2014-06-01"
+    },
+    "2015": {
+      "champion": "Mumbai Indians",
+      "runner_up": "Chennai Super Kings",
+      "finals_mvp": "RG Sharma",
+      "final_date": "2015-05-24"
+    },
+    "2016": {
+      "champion": "Sunrisers Hyderabad",
+      "runner_up": "Royal Challengers Bangalore",
+      "finals_mvp": "BCJ Cutting",
+      "final_date": "2016-05-29"
+    },
+    "2017": {
+      "champion": "Mumbai Indians",
+      "runner_up": "Rising Pune Supergiant",
+      "finals_mvp": "KH Pandya",
+      "final_date": "2017-05-21"
+    }
+  },
+  "statistics": {
+    "total_seasons": 10,
+    "most_titles": {
+      "Mumbai Indians": 3,
+      "Chennai Super Kings": 2,
+      "Kolkata Knight Riders": 2,
+      "Rajasthan Royals": 1,
+      "Deccan Chargers": 1,
+      "Sunrisers Hyderabad": 1
+    },
+    "most_runner_up": {
+      "Chennai Super Kings": 4,
+      "Royal Challengers Bangalore": 3,
+      "Mumbai Indians": 1,
+      "Kings XI Punjab": 1,
+      "Rising Pune Supergiant": 1
+    },
+    "team_count": 6
+  }
+}

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Profile - IPL Analytics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🏏 IPL Analytics</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/compare">Compare Players</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/rankings">Rankings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/records">Records</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/champions">Champions</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Player Header -->
+        <div class="player-header mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center">
+                    <img id="playerImage" src="" alt="Player" class="img-fluid rounded" style="max-width: 250px; height: auto;">
+                </div>
+                <div class="col-md-9">
+                    <h1 id="playerName" class="display-4"></h1>
+                    <div class="player-meta">
+                        <p><strong>Role:</strong> <span id="playerRole" class="badge bg-primary"></span></p>
+                        <p><strong>Nationality:</strong> <span id="playerNationality"></span></p>
+                        <p><strong>Current Team:</strong> <span id="currentTeam" class="badge bg-success"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Career Stats Cards -->
+        <div class="row mb-4" id="statsCards">
+            <!-- Dynamically loaded -->
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="careerTab" data-bs-toggle="tab" data-bs-target="#careerPane" type="button">Career Stats</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="phaseTab" data-bs-toggle="tab" data-bs-target="#phasePane" type="button">Phase Analysis</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="teamsTab" data-bs-toggle="tab" data-bs-target="#teamsPane" type="button">Team History</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="heatmapTab" data-bs-toggle="tab" data-bs-target="#heatmapPane" type="button">Performance</button>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Career Stats -->
+            <div class="tab-pane fade show active" id="careerPane">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Batting Stats</h5>
+                        <div id="battingStats" class="stats-table"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Bowling Stats</h5>
+                        <div id="bowlingStats" class="stats-table"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase Analysis -->
+            <div class="tab-pane fade" id="phasePane">
+                <div id="phaseAnalysisChart" style="height: 400px;"></div>
+                <div id="phaseTable" class="mt-4"></div>
+            </div>
+
+            <!-- Team History -->
+            <div class="tab-pane fade" id="teamsPane">
+                <div id="teamsList" class="alert alert-info"></div>
+            </div>
+
+            <!-- Performance Heatmap -->
+            <div class="tab-pane fade" id="heatmapPane">
+                <h5>Performance vs Teams</h5>
+                <div id="teamHeatmap" style="height: 400px;" class="mb-4"></div>
+                <h5>Performance by Phase</h5>
+                <div id="phaseHeatmap" style="height: 300px;"></div>
+            </div>
+        </div>
+
+        <!-- Comparison Button -->
+        <div class="mt-5 text-center">
+            <a href="#" class="btn btn-primary btn-lg" onclick="openComparison()">
+                Compare with Another Player
+            </a>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2024 IPL Big Data Analytics</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const playerName = "{{ player_name }}";
+
+        // Fetch and display player data
+        function loadPlayerProfile() {
+            fetch(`/api/player/${encodeURIComponent(playerName)}`)
+                .then(res => res.json())
+                .then(data => displayProfile(data))
+                .catch(err => console.error('Error loading profile:', err));
+        }
+
+        function displayProfile(data) {
+            // Header info
+            document.getElementById('playerName').textContent = playerName;
+            document.getElementById('playerRole').textContent = data.role || 'Unknown';
+            document.getElementById('playerNationality').textContent = data.nationality || 'Unknown';
+            document.getElementById('currentTeam').textContent = data.current_team || 'Unknown';
+            document.getElementById('playerImage').src = data.image_url || '/static/default-avatar.svg';
+
+            const stats = data.career_stats || {};
+            const batting = stats.batting || {};
+            const bowling = stats.bowling || {};
+
+            // Stats cards
+            const statsHTML = `
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Total Runs</h6>
+                            <h3>${batting.total_runs || 0}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Strike Rate</h6>
+                            <h3>${(batting.strike_rate || 0).toFixed(2)}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Total Wickets</h6>
+                            <h3>${bowling.total_wickets || 0}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Economy Rate</h6>
+                            <h3>${(bowling.economy || 0).toFixed(2)}</h3>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('statsCards').innerHTML = statsHTML;
+
+            // Batting stats table
+            const battingHTML = `
+                <table class="table table-sm">
+                    <tr><td>Matches</td><td><strong>${batting.matches || 0}</strong></td></tr>
+                    <tr><td>Balls Faced</td><td><strong>${batting.balls_faced || 0}</strong></td></tr>
+                    <tr><td>Centuries</td><td><strong>${batting.centuries || 0}</strong></td></tr>
+                    <tr><td>Fifties</td><td><strong>${batting.fifties || 0}</strong></td></tr>
+                    <tr><td>Highest Score</td><td><strong>${batting.highest_score || 0}</strong></td></tr>
+                </table>
+            `;
+            document.getElementById('battingStats').innerHTML = battingHTML;
+
+            // Bowling stats table
+            const bowlingHTML = `
+                <table class="table table-sm">
+                    <tr><td>Matches</td><td><strong>${bowling.matches || 0}</strong></td></tr>
+                    <tr><td>Balls Bowled</td><td><strong>${bowling.balls_bowled || 0}</strong></td></tr>
+                    <tr><td>Runs Conceded</td><td><strong>${bowling.runs_conceded || 0}</strong></td></tr>
+                    <tr><td>Bowling Average</td><td><strong>${(bowling.bowling_avg || 0).toFixed(2)}</strong></td></tr>
+                    <tr><td>Best Figures</td><td><strong>${bowling.best_figures || 0}/W</strong></td></tr>
+                </table>
+            `;
+            document.getElementById('bowlingStats').innerHTML = bowlingHTML;
+
+            // Teams
+            const teams = data.teams || [];
+            document.getElementById('teamsList').innerHTML = teams.join(' • ');
+
+            // Load performance heatmap
+            loadPerformanceHeatmap();
+        }
+
+        function loadPerformanceHeatmap() {
+            fetch(`/api/player-heatmap/${encodeURIComponent(playerName)}`)
+                .then(res => res.json())
+                .then(data => displayHeatmap(data))
+                .catch(err => console.error('Error loading heatmap:', err));
+        }
+
+        function displayHeatmap(data) {
+            const vsTeams = data.vs_teams || [];
+            const vsPhases = data.vs_phases || [];
+
+            // VS Teams chart
+            if (vsTeams.length > 0) {
+                const teamNames = vsTeams.map(t => t.bowling_team);
+                const teamRuns = vsTeams.map(t => t.runs);
+                const teamSR = vsTeams.map(t => t.strike_rate);
+
+                const trace1 = {x: teamNames, y: teamRuns, type: 'bar', name: 'Runs', marker: {color: '#007bff'}};
+                const layout = {title: 'Performance vs Teams', xaxis: {title: 'Team'}, yaxis: {title: 'Runs'}};
+                Plotly.newPlot('teamHeatmap', [trace1], layout);
+            }
+
+            // VS Phases chart
+            if (vsPhases.length > 0) {
+                const phaseNames = vsPhases.map(p => p.phase);
+                const phaseRuns = vsPhases.map(p => p.runs);
+                const phaseSR = vsPhases.map(p => p.strike_rate);
+
+                const trace = {x: phaseNames, y: phaseSR, type: 'bar', marker: {color: '#28a745'}};
+                const layout = {title: 'Strike Rate by Phase', xaxis: {title: 'Phase'}, yaxis: {title: 'Strike Rate'}};
+                Plotly.newPlot('phaseHeatmap', [trace], layout);
+            }
+        }
+
+        function openComparison() {
+            window.location.href = `/compare?players=${encodeURIComponent(playerName)}`;
+        }
+
+        // Load on page load
+        loadPlayerProfile();
+    </script>
+</body>
+</html>

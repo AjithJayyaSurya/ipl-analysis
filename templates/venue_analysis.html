@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venue Analysis - IPL Analytics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI'; background-color: #f8f9fa; }
+        .navbar { background: linear-gradient(135deg, #1a3a52 0%, #2d5f7f 100%); }
+        .chart-container { background: white; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .venue-card { background: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 4px solid #ff6b35; }
+        .venue-name { font-size: 1.3rem; font-weight: bold; color: #1a3a52; }
+        .venue-stat { color: #666; font-size: 0.9rem; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; color: #ff6b35; }
+        .section-title { font-size: 1.8rem; font-weight: bold; color: #1a3a52; margin: 2rem 0 1.5rem 0; }
+        .footer { background: #1a3a52; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">🏏 IPL Analytics</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/compare">Compare Players</a></li>
+                <li class="nav-item"><a class="nav-link" href="/venue-analysis">Venues</a></li>
+                <li class="nav-item"><a class="nav-link" href="/rankings">Rankings</a></li>
+                <li class="nav-item"><a class="nav-link" href="/champions">Champions</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container" style="padding: 2rem 0;">
+    <h1 style="font-size: 2.5rem; font-weight: bold; color: #1a3a52; margin-bottom: 2rem;">
+        <i class="fas fa-map-marker-alt"></i> Venue-wise Analysis
+    </h1>
+
+    <!-- Venues Chart -->
+    <div class="chart-container">
+        <h5>Top Venues by Average Runs</h5>
+        <div id="venuesChart" style="height: 500px;"></div>
+    </div>
+
+    <!-- Venue Details -->
+    <h2 class="section-title">Venue Statistics</h2>
+
+    <div id="venuesList"></div>
+
+    <!-- Venue Information Modal -->
+    <div class="modal fade" id="venueModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="venueModalTitle">Venue Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="venueModalBody">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2024 IPL Big Data Analytics | Venue Analysis</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function loadVenueStats() {
+        fetch('/api/venue-stats')
+            .then(res => res.json())
+            .then(data => displayVenueStats(data))
+            .catch(err => console.error('Error:', err));
+    }
+
+    function displayVenueStats(data) {
+        if (!data || data.length === 0) {
+            document.getElementById('venuesList').innerHTML = '<p>No venue data available</p>';
+            return;
+        }
+
+        // Create chart
+        const venues = data.map(v => v.venue);
+        const avgRuns = data.map(v => v.avg_runs);
+
+        Plotly.newPlot('venuesChart', [{
+            x: venues,
+            y: avgRuns,
+            type: 'bar',
+            marker: { color: '#ff6b35' }
+        }], {
+            xaxis: { title: 'Venue' },
+            yaxis: { title: 'Average Runs' },
+            responsive: true
+        });
+
+        // Display venue cards
+        const venueCardsHtml = data.map(venue => `
+            <div class="venue-card">
+                <div class="venue-name">${venue.venue}</div>
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="venue-stat">Matches Played</div>
+                        <div class="stat-value">${venue.matches}</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="venue-stat">Total Runs</div>
+                        <div class="stat-value">${venue.total_runs}</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="venue-stat">Avg Runs</div>
+                        <div class="stat-value">${venue.avg_runs}</div>
+                    </div>
+                </div>
+                <button class="btn btn-sm btn-primary mt-3"
+                    onclick="loadVenueDetails('${venue.venue}')">
+                    View Details <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        `).join('');
+
+        document.getElementById('venuesList').innerHTML = venueCardsHtml;
+    }
+
+    function loadVenueDetails(venue) {
+        fetch(`/api/venue/${encodeURIComponent(venue)}`)
+            .then(res => res.json())
+            .then(data => showVenueModal(data))
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Failed to load venue details');
+            });
+    }
+
+    function showVenueModal(venueData) {
+        document.getElementById('venueModalTitle').textContent = `${venueData.venue} - Top Performers`;
+
+        const topPerformersHtml = (venueData.top_performers || []).map((p, i) => `
+            <div class="mb-2">
+                <strong>${i + 1}. ${p.player}</strong> -
+                <span style="color: #ff6b35; font-weight: bold;">${p.runs} runs</span>
+                (${p.matches} matches)
+            </div>
+        `).join('');
+
+        const modalBody = `
+            <div>
+                <h6>Total Matches: <strong>${venueData.total_matches}</strong></h6>
+                <hr>
+                <h6>Top Performers:</h6>
+                ${topPerformersHtml || '<p>No data available</p>'}
+            </div>
+        `;
+
+        document.getElementById('venueModalBody').innerHTML = modalBody;
+        new bootstrap.Modal(document.getElementById('venueModal')).show();
+    }
+
+    // Load data on page load
+    loadVenueStats();
+</script>
+
+</body>
+</html>

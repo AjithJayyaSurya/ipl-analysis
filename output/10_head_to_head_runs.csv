@@ -1,0 +1,147 @@
+team,opponent,matches_played,total_runs_scored,run_rate
+Chennai Super Kings,Sunrisers Hyderabad,6,1093,8.85
+Chennai Super Kings,Kings XI Punjab,17,2871,8.46
+Chennai Super Kings,Delhi Daredevils,16,2589,7.98
+Chennai Super Kings,Rajasthan Royals,17,2732,7.92
+Chennai Super Kings,Royal Challengers Bangalore,19,2957,7.88
+Chennai Super Kings,Kolkata Knight Riders,16,2383,7.86
+Chennai Super Kings,Mumbai Indians,22,3485,7.79
+Chennai Super Kings,Deccan Chargers,10,1592,7.69
+Chennai Super Kings,Kochi Tuskers Kerala,2,283,7.51
+Chennai Super Kings,Pune Warriors,6,905,7.4
+Deccan Chargers,Kings XI Punjab,10,1686,8.25
+Deccan Chargers,Delhi Daredevils,11,1790,8.03
+Deccan Chargers,Pune Warriors,4,637,7.88
+Deccan Chargers,Rajasthan Royals,9,1427,7.71
+Deccan Chargers,Royal Challengers Bangalore,11,1710,7.59
+Deccan Chargers,Kolkata Knight Riders,9,1297,7.27
+Deccan Chargers,Chennai Super Kings,10,1412,7.23
+Deccan Chargers,Mumbai Indians,10,1375,7.14
+Deccan Chargers,Kochi Tuskers Kerala,1,129,6.19
+Delhi Daredevils,Gujarat Lions,4,732,9.63
+Delhi Daredevils,Rising Pune Supergiant,2,373,8.99
+Delhi Daredevils,Deccan Chargers,11,1794,8.34
+Delhi Daredevils,Pune Warriors,6,864,7.87
+Delhi Daredevils,Royal Challengers Bangalore,19,3042,7.83
+Delhi Daredevils,Rajasthan Royals,16,2409,7.64
+Delhi Daredevils,Sunrisers Hyderabad,10,1517,7.52
+Delhi Daredevils,Kolkata Knight Riders,19,2772,7.48
+Delhi Daredevils,Kings XI Punjab,20,2759,7.46
+Delhi Daredevils,Mumbai Indians,20,2841,7.38
+Delhi Daredevils,Chennai Super Kings,16,2259,7.37
+Delhi Daredevils,Kochi Tuskers Kerala,2,297,7.13
+Delhi Daredevils,Rising Pune Supergiants,2,283,6.82
+Gujarat Lions,Kolkata Knight Riders,4,660,9.19
+Gujarat Lions,Rising Pune Supergiants,2,360,9.0
+Gujarat Lions,Delhi Daredevils,4,724,8.83
+Gujarat Lions,Rising Pune Supergiant,2,333,8.58
+Gujarat Lions,Kings XI Punjab,4,647,8.14
+Gujarat Lions,Mumbai Indians,4,649,7.95
+Gujarat Lions,Royal Challengers Bangalore,5,771,7.92
+Gujarat Lions,Sunrisers Hyderabad,5,712,6.99
+Kings XI Punjab,Kochi Tuskers Kerala,1,181,9.2
+Kings XI Punjab,Gujarat Lions,4,692,8.47
+Kings XI Punjab,Royal Challengers Bangalore,20,3114,8.3
+Kings XI Punjab,Rising Pune Supergiants,2,325,8.23
+Kings XI Punjab,Deccan Chargers,10,1632,8.11
+Kings XI Punjab,Chennai Super Kings,17,2745,8.05
+Kings XI Punjab,Mumbai Indians,20,3283,7.97
+Kings XI Punjab,Sunrisers Hyderabad,10,1614,7.95
+Kings XI Punjab,Rajasthan Royals,15,2421,7.85
+Kings XI Punjab,Kolkata Knight Riders,21,3280,7.6
+Kings XI Punjab,Delhi Daredevils,20,2742,7.44
+Kings XI Punjab,Pune Warriors,6,777,6.94
+Kings XI Punjab,Rising Pune Supergiant,2,237,6.46
+Kochi Tuskers Kerala,Mumbai Indians,1,184,9.12
+Kochi Tuskers Kerala,Kings XI Punjab,1,178,8.28
+Kochi Tuskers Kerala,Chennai Super Kings,2,276,7.56
+Kochi Tuskers Kerala,Delhi Daredevils,2,260,7.26
+Kochi Tuskers Kerala,Rajasthan Royals,2,207,7.26
+Kochi Tuskers Kerala,Pune Warriors,1,148,7.22
+Kochi Tuskers Kerala,Kolkata Knight Riders,2,288,6.97
+Kochi Tuskers Kerala,Royal Challengers Bangalore,2,286,6.78
+Kochi Tuskers Kerala,Deccan Chargers,1,74,4.31
+Kolkata Knight Riders,Rising Pune Supergiant,2,339,8.69
+Kolkata Knight Riders,Rising Pune Supergiants,2,228,8.66
+Kolkata Knight Riders,Gujarat Lions,4,653,8.43
+Kolkata Knight Riders,Royal Challengers Bangalore,20,3139,8.14
+Kolkata Knight Riders,Kings XI Punjab,21,3235,8.05
+Kolkata Knight Riders,Sunrisers Hyderabad,12,1723,8.01
+Kolkata Knight Riders,Delhi Daredevils,19,2787,7.54
+Kolkata Knight Riders,Deccan Chargers,9,1378,7.44
+Kolkata Knight Riders,Chennai Super Kings,16,2311,7.37
+Kolkata Knight Riders,Mumbai Indians,21,3060,7.33
+Kolkata Knight Riders,Pune Warriors,5,720,7.19
+Kolkata Knight Riders,Rajasthan Royals,15,2101,7.08
+Kolkata Knight Riders,Kochi Tuskers Kerala,2,265,6.52
+Mumbai Indians,Kochi Tuskers Kerala,1,182,8.67
+Mumbai Indians,Royal Challengers Bangalore,21,3411,8.01
+Mumbai Indians,Chennai Super Kings,22,3523,7.94
+Mumbai Indians,Kings XI Punjab,20,3142,7.93
+Mumbai Indians,Kolkata Knight Riders,21,3210,7.89
+Mumbai Indians,Rajasthan Royals,16,2516,7.88
+Mumbai Indians,Delhi Daredevils,20,3247,7.86
+Mumbai Indians,Gujarat Lions,4,645,7.77
+Mumbai Indians,Rising Pune Supergiant,4,612,7.34
+Mumbai Indians,Sunrisers Hyderabad,10,1432,7.32
+Mumbai Indians,Deccan Chargers,10,1504,7.27
+Mumbai Indians,Rising Pune Supergiants,2,282,7.08
+Mumbai Indians,Pune Warriors,6,804,6.6
+Pune Warriors,Delhi Daredevils,5,846,8.16
+Pune Warriors,Royal Challengers Bangalore,5,778,7.58
+Pune Warriors,Deccan Chargers,4,605,7.47
+Pune Warriors,Kochi Tuskers Kerala,1,151,7.37
+Pune Warriors,Rajasthan Royals,5,719,7.07
+Pune Warriors,Kings XI Punjab,6,798,7.05
+Pune Warriors,Chennai Super Kings,6,851,6.94
+Pune Warriors,Mumbai Indians,6,759,6.26
+Pune Warriors,Kolkata Knight Riders,5,639,6.23
+Pune Warriors,Sunrisers Hyderabad,2,212,5.55
+Rajasthan Royals,Kings XI Punjab,15,2506,8.26
+Rajasthan Royals,Deccan Chargers,9,1387,7.93
+Rajasthan Royals,Pune Warriors,5,767,7.88
+Rajasthan Royals,Delhi Daredevils,16,2521,7.84
+Rajasthan Royals,Mumbai Indians,16,2482,7.76
+Rajasthan Royals,Chennai Super Kings,17,2615,7.72
+Rajasthan Royals,Kolkata Knight Riders,15,2229,7.37
+Rajasthan Royals,Royal Challengers Bangalore,15,1997,6.97
+Rajasthan Royals,Sunrisers Hyderabad,7,956,6.87
+Rajasthan Royals,Kochi Tuskers Kerala,2,208,6.27
+Rising Pune Supergiant,Kolkata Knight Riders,2,340,8.4
+Rising Pune Supergiant,Gujarat Lions,2,338,8.21
+Rising Pune Supergiant,Sunrisers Hyderabad,2,327,8.01
+Rising Pune Supergiant,Mumbai Indians,4,637,7.77
+Rising Pune Supergiant,Royal Challengers Bangalore,2,318,7.66
+Rising Pune Supergiant,Kings XI Punjab,2,241,7.3
+Rising Pune Supergiant,Delhi Daredevils,2,269,7.14
+Rising Pune Supergiants,Gujarat Lions,2,358,8.77
+Rising Pune Supergiants,Royal Challengers Bangalore,2,363,8.64
+Rising Pune Supergiants,Mumbai Indians,2,285,7.81
+Rising Pune Supergiants,Kings XI Punjab,2,325,7.8
+Rising Pune Supergiants,Delhi Daredevils,2,242,7.56
+Rising Pune Supergiants,Sunrisers Hyderabad,2,227,7.02
+Rising Pune Supergiants,Kolkata Knight Riders,2,263,6.92
+Royal Challengers Bangalore,Pune Warriors,5,990,9.57
+Royal Challengers Bangalore,Rising Pune Supergiants,2,380,9.27
+Royal Challengers Bangalore,Gujarat Lions,5,934,9.26
+Royal Challengers Bangalore,Sunrisers Hyderabad,10,1637,8.65
+Royal Challengers Bangalore,Kochi Tuskers Kerala,2,290,8.57
+Royal Challengers Bangalore,Kings XI Punjab,20,3237,8.26
+Royal Challengers Bangalore,Delhi Daredevils,19,2881,8.11
+Royal Challengers Bangalore,Kolkata Knight Riders,20,2826,7.71
+Royal Challengers Bangalore,Mumbai Indians,21,3282,7.65
+Royal Challengers Bangalore,Deccan Chargers,11,1652,7.58
+Royal Challengers Bangalore,Rajasthan Royals,16,2274,7.52
+Royal Challengers Bangalore,Chennai Super Kings,19,2793,7.51
+Royal Challengers Bangalore,Rising Pune Supergiant,2,230,5.61
+Sunrisers Hyderabad,Royal Challengers Bangalore,10,1705,8.68
+Sunrisers Hyderabad,Gujarat Lions,5,727,8.17
+Sunrisers Hyderabad,Chennai Super Kings,6,995,8.08
+Sunrisers Hyderabad,Kings XI Punjab,10,1630,8.08
+Sunrisers Hyderabad,Delhi Daredevils,10,1430,7.86
+Sunrisers Hyderabad,Rising Pune Supergiant,2,312,7.61
+Sunrisers Hyderabad,Mumbai Indians,10,1507,7.52
+Sunrisers Hyderabad,Kolkata Knight Riders,12,1819,7.37
+Sunrisers Hyderabad,Rajasthan Royals,7,1007,6.91
+Sunrisers Hyderabad,Rising Pune Supergiants,2,255,6.22
+Sunrisers Hyderabad,Pune Warriors,2,245,5.95

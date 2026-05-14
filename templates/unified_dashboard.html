@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Analytics - Unified Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation Styles */
+        .navbar {
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5f7f 100%);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.8) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #ff6b35 !important;
+            text-shadow: 0 0 10px rgba(255,107,53,0.3);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #ff6b35;
+            border-radius: 3px;
+        }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a3a52;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .summary-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.8rem;
+        }
+
+        .summary-card .stat {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid #e8e8e8;
+            gap: 0.5rem;
+        }
+
+        .nav-link.active {
+            background-color: #ff6b35;
+            color: white !important;
+            border: none;
+        }
+
+        /* Cards */
+        .card {
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #1a3a52 0%, #2d5f7f 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Player Search */
+        .player-search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .player-search-box input {
+            padding: 0.8rem 1rem;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+
+        .player-search-box input:focus {
+            border-color: #ff6b35;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+        }
+
+        .dropdown-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .dropdown-list.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Player Cards */
+        .player-card {
+            text-align: center;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover {
+            border-color: #ff6b35;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .player-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 3px solid #ff6b35;
+        }
+
+        .player-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1a3a52;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-role {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-team {
+            background: #ff6b35;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Table */
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .table th {
+            color: #1a3a52;
+            font-weight: 600;
+            padding: 1rem;
+        }
+
+        .table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a3a52;
+            margin-bottom: 1rem;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8555 100%);
+            border: none;
+            padding: 0.7rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Champions Timeline */
+        .champions-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .timeline-year {
+            font-weight: bold;
+            color: #ff6b35;
+            min-width: 80px;
+            font-size: 1.2rem;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+            margin-left: 1.5rem;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1a3a52;
+        }
+
+        .trophy-icon {
+            color: #ffd700;
+            margin-right: 0.5rem;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff6b35;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a3a52;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+            }
+
+            .player-image {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        .badge-custom {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .badge-success-custom {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-secondary-custom {
+            background: #6c757d;
+            color: white;
+        }
+
+        .badge-info-custom {
+            background: #17a2b8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-cricket"></i> IPL Analytics
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="switchSection('dashboard')">
+                            <i class="fas fa-chart-bar"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="switchSection('compare')">
+                            <i class="fas fa-balance-scale"></i> Compare
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="switchSection('champions')">
+                            <i class="fas fa-trophy"></i> Champions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="switchSection('rankings')">
+                            <i class="fas fa-medal"></i> Rankings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="switchSection('records')">
+                            <i class="fas fa-star"></i> Records
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-more"></i> More
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="moreDropdown">
+                            <li><a class="dropdown-item" href="/player-performance" target="_blank">
+                                <i class="fas fa-chart-line"></i> Player Performance
+                            </a></li>
+                            <li><a class="dropdown-item" href="/venue-analysis" target="_blank">
+                                <i class="fas fa-map-marker-alt"></i> Venue Analysis
+                            </a></li>
+                            <li><a class="dropdown-item" href="/team-comparison" target="_blank">
+                                <i class="fas fa-shield-alt"></i> Team Comparison
+                            </a></li>
+                            <li><a class="dropdown-item" href="/live" target="_blank">
+                                <i class="fas fa-play-circle"></i> Live Matches
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid" style="padding: 2rem 0;">
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="section active">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i> Analytics Dashboard
+                </h2>
+
+                <!-- Summary Cards -->
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <h3>Total Matches</h3>
+                        <p id="dash-total-matches" class="stat">Loading...</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Teams</h3>
+                        <p id="dash-total-teams" class="stat">Loading...</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Batsmen</h3>
+                        <p id="dash-total-batsmen" class="stat">Loading...</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Bowlers</h3>
+                        <p id="dash-total-bowlers" class="stat">Loading...</p>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="batsmen-tab" data-bs-toggle="tab" data-bs-target="#batsmen-content" type="button" role="tab">
+                            <i class="fas fa-star"></i> Top Batsmen
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="bowlers-tab" data-bs-toggle="tab" data-bs-target="#bowlers-content" type="button" role="tab">
+                            <i class="fas fa-flame"></i> Top Bowlers
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="teams-tab" data-bs-toggle="tab" data-bs-target="#teams-content" type="button" role="tab">
+                            <i class="fas fa-shield-alt"></i> Team Stats
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="phases-tab" data-bs-toggle="tab" data-bs-target="#phases-content" type="button" role="tab">
+                            <i class="fas fa-clock"></i> Phase Analysis
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="dismissals-tab" data-bs-toggle="tab" data-bs-target="#dismissals-content" type="button" role="tab">
+                            <i class="fas fa-times-circle"></i> Dismissals
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="fielders-tab" data-bs-toggle="tab" data-bs-target="#fielders-content" type="button" role="tab">
+                            <i class="fas fa-hand-paper"></i> Top Fielders
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab Content -->
+                <div class="tab-content" style="margin-top: 2rem;">
+                    <!-- Batsmen -->
+                    <div class="tab-pane fade show active" id="batsmen-content" role="tabpanel">
+                        <div class="chart-container">
+                            <div class="chart-title">Top 20 Batsmen by Total Runs</div>
+                            <div id="batsmen-chart" style="height: 500px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Batsmen Statistics</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="batsmen-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Player</th>
+                                                <th>Total Runs</th>
+                                                <th>Balls Faced</th>
+                                                <th>Strike Rate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bowlers -->
+                    <div class="tab-pane fade" id="bowlers-content" role="tabpanel">
+                        <div class="chart-container">
+                            <div class="chart-title">Top 20 Bowlers by Wickets</div>
+                            <div id="bowlers-chart" style="height: 500px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Bowlers Statistics</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="bowlers-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Player</th>
+                                                <th>Wickets</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Teams -->
+                    <div class="tab-pane fade" id="teams-content" role="tabpanel">
+                        <div class="chart-container">
+                            <div class="chart-title">Team Run Rates</div>
+                            <div id="teams-chart" style="height: 500px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Team Statistics</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="teams-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Team</th>
+                                                <th>Total Runs</th>
+                                                <th>Bat Runs</th>
+                                                <th>Extras</th>
+                                                <th>Run Rate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phases -->
+                    <div class="tab-pane fade" id="phases-content" role="tabpanel">
+                        <div class="chart-container">
+                            <div class="chart-title">Phase-wise Run Rates</div>
+                            <div id="phases-chart" style="height: 500px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Phase Analysis</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="phases-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Team</th>
+                                                <th>Phase</th>
+                                                <th>Runs</th>
+                                                <th>Balls</th>
+                                                <th>Run Rate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dismissals -->
+                    <div class="tab-pane fade" id="dismissals-content" role="tabpanel">
+                        <div class="chart-container">
+                            <div class="chart-title">Dismissal Types Distribution</div>
+                            <div id="dismissals-chart" style="height: 500px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Dismissal Statistics</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="dismissals-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Dismissal Type</th>
+                                                <th>Count</th>
+                                                <th>Percentage</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fielders -->
+                    <div class="tab-pane fade" id="fielders-content" role="tabpanel">
+                        <div class="chart-container">
+                            <div class="chart-title">Top Fielders by Catches</div>
+                            <div id="fielders-chart" style="height: 500px;"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">Fielding Statistics</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="fielders-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Player</th>
+                                                <th>Catches</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARE PLAYERS SECTION -->
+        <section id="compare" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-balance-scale"></i> Compare Players
+                </h2>
+
+                <!-- Player Selection -->
+                <div class="card" style="margin-bottom: 2rem;">
+                    <div class="card-header">Select Players to Compare</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="form-label">Player 1</label>
+                                <div class="player-search-box">
+                                    <input type="text" id="compareSearch1" class="form-control" placeholder="Search player 1..." autocomplete="off">
+                                    <div class="dropdown-list" id="compareList1"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Player 2</label>
+                                <div class="player-search-box">
+                                    <input type="text" id="compareSearch2" class="form-control" placeholder="Search player 2..." autocomplete="off">
+                                    <div class="dropdown-list" id="compareList2"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">&nbsp;</label>
+                                <button class="btn btn-primary w-100" onclick="compareUnifiedPlayers()">
+                                    <i class="fas fa-arrow-right"></i> Compare
+                                </button>
+                                <button class="btn btn-secondary w-100 mt-2" onclick="resetUnifiedComparison()">
+                                    <i class="fas fa-redo"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Results -->
+                <div id="comparisonResults" style="display:none;">
+                    <!-- Player Cards -->
+                    <div class="row mb-4" id="comparePlayerCards">
+                        <!-- Dynamically loaded -->
+                    </div>
+
+                    <!-- Stats Comparison -->
+                    <div class="card mb-4">
+                        <div class="card-header">Career Statistics Comparison</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Metric</th>
+                                            <th id="comparep1Header">Player 1</th>
+                                            <th id="comparep2Header">Player 2</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="compareStatsTable">
+                                        <!-- Dynamically loaded -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Head-to-Head -->
+                    <div class="card mb-4">
+                        <div class="card-header">Head-to-Head Statistics</div>
+                        <div class="card-body" id="compareH2H">
+                            <!-- Dynamically loaded -->
+                        </div>
+                    </div>
+
+                    <!-- Charts -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <div class="chart-title">Runs Comparison</div>
+                                <div id="compareRunsChart" style="height: 350px;"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <div class="chart-title">Strike Rate Comparison</div>
+                                <div id="compareSRChart" style="height: 350px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHAMPIONS SECTION -->
+        <section id="champions" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy"></i> IPL Champions History
+                </h2>
+
+                <!-- Current Champion -->
+                <div class="text-center mb-5">
+                    <div style="font-size: 4rem; margin: 1rem 0;">🏆</div>
+                    <h3 id="currentChampionText">Loading...</h3>
+                </div>
+
+                <!-- Statistics -->
+                <div class="row mb-4" id="championsStats">
+                    <!-- Dynamically loaded -->
+                </div>
+
+                <!-- Champions Table -->
+                <div class="card mb-4">
+                    <div class="card-header">Season-wise Champions (2008-2024)</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Season</th>
+                                        <th><i class="fas fa-crown"></i> Champion</th>
+                                        <th><i class="fas fa-medal"></i> Runner-up</th>
+                                        <th><i class="fas fa-star"></i> Finals MVP</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="championsTableBody">
+                                    <!-- Dynamically loaded -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <div class="chart-title">Teams by Number of Titles</div>
+                            <div id="titlesChart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="chart-container">
+                            <div class="chart-title">Finals Appearances</div>
+                            <div id="finalsChart" style="height: 400px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RANKINGS SECTION -->
+        <section id="rankings" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-medal"></i> Seasonal Rankings
+                </h2>
+
+                <div class="card mb-4">
+                    <div class="card-header">Select Season</div>
+                    <div class="card-body">
+                        <select id="rankingSeasonSelect" class="form-select form-select-lg" onchange="loadUnifiedSeason()">
+                            <option value="">Choose a season...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" id="rankingsContent">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-star"></i> Top Batsmen
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-hover" id="rankBatsmenTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Player</th>
+                                            <th>Runs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-flame"></i> Top Bowlers
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm table-hover" id="rankBowlersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Player</th>
+                                            <th>Wickets</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RECORDS SECTION -->
+        <section id="records" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> Record Milestones
+                </h2>
+
+                <div class="row" id="recordsContent">
+                    <!-- Dynamically loaded -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 IPL Big Data Analytics | Explore Cricket Data Insights</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let comparedPlayers = ['', ''];
+
+        // Switch Sections
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            event.target.closest('.nav-link').classList.add('active');
+
+            // Load section data
+            if (sectionId === 'dashboard') {
+                loadUnifiedDashboard();
+            } else if (sectionId === 'champions') {
+                loadUnifiedChampions();
+            } else if (sectionId === 'rankings') {
+                loadUnifiedRankings();
+            } else if (sectionId === 'records') {
+                loadUnifiedRecords();
+            }
+        }
+
+        // DASHBOARD
+        function loadUnifiedDashboard() {
+            // Load summary
+            fetch('/api/summary')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('dash-total-matches').textContent = data.total_matches;
+                    document.getElementById('dash-total-teams').textContent = data.total_teams;
+                    document.getElementById('dash-total-batsmen').textContent = data.total_batsmen;
+                    document.getElementById('dash-total-bowlers').textContent = data.total_bowlers;
+                });
+
+            // Load charts
+            Promise.all([
+                fetch('/api/top-batsmen').then(r => r.json()),
+                fetch('/api/top-bowlers').then(r => r.json()),
+                fetch('/api/team-stats').then(r => r.json()),
+                fetch('/api/phase-analysis').then(r => r.json()),
+                fetch('/api/dismissals').then(r => r.json()),
+                fetch('/api/top-fielders').then(r => r.json())
+            ]).then(([batsmen, bowlers, teams, phases, dismissals, fielders]) => {
+                displayBatsmen(batsmen);
+                displayBowlers(bowlers);
+                displayTeams(teams);
+                displayPhases(phases);
+                displayDismissals(dismissals);
+                displayFielders(fielders);
+            });
+        }
+
+        function displayBatsmen(data) {
+            const names = data.map(d => d.batsman);
+            const runs = data.map(d => d.total_runs);
+            Plotly.newPlot('batsmen-chart', [{
+                x: names,
+                y: runs,
+                type: 'bar',
+                marker: { color: '#ff6b35' }
+            }], { responsive: true });
+            displayTable(data, 'batsmen-table', ['batsman', 'total_runs', 'balls_faced', 'strike_rate']);
+        }
+
+        function displayBowlers(data) {
+            const names = data.map(d => d.bowler);
+            const wickets = data.map(d => d.wickets);
+            Plotly.newPlot('bowlers-chart', [{
+                x: names,
+                y: wickets,
+                type: 'bar',
+                marker: { color: '#dc3545' }
+            }], { responsive: true });
+            displayTable(data, 'bowlers-table', ['bowler', 'wickets']);
+        }
+
+        function displayTeams(data) {
+            const teams = data.map(d => d.batting_team);
+            const rates = data.map(d => d.run_rate);
+            Plotly.newPlot('teams-chart', [{
+                x: teams,
+                y: rates,
+                type: 'bar',
+                marker: { color: '#28a745' }
+            }], { responsive: true });
+            displayTable(data, 'teams-table', ['batting_team', 'total_runs', 'bat_runs', 'extras', 'run_rate']);
+        }
+
+        function displayPhases(data) {
+            const phaseData = {};
+            data.forEach(d => {
+                const phase = d.phase;
+                if (!phaseData[phase]) phaseData[phase] = { runs: 0, balls: 0 };
+                phaseData[phase].runs += d.runs_scored;
+                phaseData[phase].balls += d.balls_bowled;
+            });
+            const phases = Object.keys(phaseData);
+            const rates = phases.map(p => parseFloat((phaseData[p].runs * 6 / phaseData[p].balls).toFixed(2)));
+            Plotly.newPlot('phases-chart', [{
+                x: phases,
+                y: rates,
+                type: 'bar',
+                marker: { color: '#ffc107' }
+            }], { responsive: true });
+            displayTable(data.slice(0, 20), 'phases-table', ['batting_team', 'phase', 'runs_scored', 'balls_bowled', 'run_rate']);
+        }
+
+        function displayDismissals(data) {
+            const types = data.map(d => d.dismissal_kind);
+            const counts = data.map(d => d.total_dismissals);
+            Plotly.newPlot('dismissals-chart', [{
+                labels: types,
+                values: counts,
+                type: 'pie'
+            }], { responsive: true });
+            displayTable(data, 'dismissals-table', ['dismissal_kind', 'total_dismissals', 'percentage']);
+        }
+
+        function displayFielders(data) {
+            const names = data.map(d => d.fielder);
+            const catches = data.map(d => d.catches_taken);
+            Plotly.newPlot('fielders-chart', [{
+                x: names,
+                y: catches,
+                type: 'bar',
+                marker: { color: '#17a2b8' }
+            }], { responsive: true });
+            displayTable(data, 'fielders-table', ['fielder', 'catches_taken']);
+        }
+
+        function displayTable(data, tableId, columns) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = data.map(row => `
+                <tr>
+                    ${columns.map(col => `<td>${row[col] !== undefined ? (typeof row[col] === 'number' ? row[col].toFixed(2) : row[col]) : '-'}</td>`).join('')}
+                </tr>
+            `).join('');
+        }
+
+        // COMPARE PLAYERS
+        function searchUnifiedPlayers(query, playerIndex) {
+            if (query.length < 2) {
+                document.getElementById(playerIndex === 0 ? 'compareList1' : 'compareList2').classList.remove('active');
+                return;
+            }
+            fetch(`/api/player-search?q=${encodeURIComponent(query)}`)
+                .then(r => r.json())
+                .then(data => {
+                    const listId = playerIndex === 0 ? 'compareList1' : 'compareList2';
+                    const list = document.getElementById(listId);
+                    list.innerHTML = data.map(p => `
+                        <div class="dropdown-item" onclick="selectComparePlayer('${p.name}', ${playerIndex})">
+                            ${p.name} - ${p.current_team}
+                        </div>
+                    `).join('');
+                    list.classList.add('active');
+                });
+        }
+
+        function selectComparePlayer(name, index) {
+            comparedPlayers[index] = name;
+            const inputId = index === 0 ? 'compareSearch1' : 'compareSearch2';
+            document.getElementById(inputId).value = name;
+            document.getElementById(index === 0 ? 'compareList1' : 'compareList2').classList.remove('active');
+        }
+
+        function compareUnifiedPlayers() {
+            if (!comparedPlayers[0] || !comparedPlayers[1]) {
+                alert('Please select both players');
+                return;
+            }
+            Promise.all([
+                fetch(`/api/player/${encodeURIComponent(comparedPlayers[0])}`).then(r => r.json()),
+                fetch(`/api/player/${encodeURIComponent(comparedPlayers[1])}`).then(r => r.json()),
+                fetch(`/api/player-head-to-head?player1=${encodeURIComponent(comparedPlayers[0])}&player2=${encodeURIComponent(comparedPlayers[1])}`).then(r => r.json())
+            ]).then(([p1, p2, h2h]) => {
+                displayUnifiedComparison(comparedPlayers[0], p1, comparedPlayers[1], p2, h2h);
+            });
+        }
+
+        function displayUnifiedComparison(p1Name, p1Data, p2Name, p2Data, h2hData) {
+            // Player cards
+            document.getElementById('comparep1Header').textContent = p1Name;
+            document.getElementById('comparep2Header').textContent = p2Name;
+            document.getElementById('comparePlayerCards').innerHTML = `
+                <div class="col-md-6">
+                    <div class="player-card">
+                        <img src="${p1Data.image_url}" class="player-image">
+                        <div class="player-name">${p1Name}</div>
+                        <div class="player-role">${p1Data.role} • ${p1Data.nationality}</div>
+                        <div class="player-team">${p1Data.current_team}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="player-card">
+                        <img src="${p2Data.image_url}" class="player-image">
+                        <div class="player-name">${p2Name}</div>
+                        <div class="player-role">${p2Data.role} • ${p2Data.nationality}</div>
+                        <div class="player-team">${p2Data.current_team}</div>
+                    </div>
+                </div>
+            `;
+
+            // Stats table
+            const b1 = p1Data.career_stats?.batting || {};
+            const b2 = p2Data.career_stats?.batting || {};
+            const bo1 = p1Data.career_stats?.bowling || {};
+            const bo2 = p2Data.career_stats?.bowling || {};
+
+            document.getElementById('compareStatsTable').innerHTML = `
+                <tr><td>Total Runs</td><td>${b1.total_runs || 0}</td><td>${b2.total_runs || 0}</td></tr>
+                <tr><td>Strike Rate</td><td>${(b1.strike_rate || 0).toFixed(2)}</td><td>${(b2.strike_rate || 0).toFixed(2)}</td></tr>
+                <tr><td>Total Wickets</td><td>${bo1.total_wickets || 0}</td><td>${bo2.total_wickets || 0}</td></tr>
+                <tr><td>Economy Rate</td><td>${(bo1.economy || 0).toFixed(2)}</td><td>${(bo2.economy || 0).toFixed(2)}</td></tr>
+            `;
+
+            // H2H
+            document.getElementById('compareH2H').innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>${p1Name}</strong></p>
+                        <p>Runs: <strong>${h2hData[p1Name]?.runs || 0}</strong></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>${p2Name}</strong></p>
+                        <p>Runs: <strong>${h2hData[p2Name]?.runs || 0}</strong></p>
+                    </div>
+                </div>
+            `;
+
+            // Charts
+            Plotly.newPlot('compareRunsChart', [{
+                x: [p1Name, p2Name],
+                y: [b1.total_runs || 0, b2.total_runs || 0],
+                type: 'bar',
+                marker: { color: '#ff6b35' }
+            }], { responsive: true });
+
+            Plotly.newPlot('compareSRChart', [{
+                x: [p1Name, p2Name],
+                y: [b1.strike_rate || 0, b2.strike_rate || 0],
+                type: 'bar',
+                marker: { color: '#ffc107' }
+            }], { responsive: true });
+
+            document.getElementById('comparisonResults').style.display = 'block';
+            window.scrollTo(0, document.getElementById('comparisonResults').offsetTop - 100);
+        }
+
+        function resetUnifiedComparison() {
+            comparedPlayers = ['', ''];
+            document.getElementById('compareSearch1').value = '';
+            document.getElementById('compareSearch2').value = '';
+            document.getElementById('compareList1').innerHTML = '';
+            document.getElementById('compareList2').innerHTML = '';
+            document.getElementById('comparisonResults').style.display = 'none';
+        }
+
+        // CHAMPIONS
+        function loadUnifiedChampions() {
+            fetch('/api/ipl-champions')
+                .then(r => r.json())
+                .then(data => displayUnifiedChampions(data));
+        }
+
+        function displayUnifiedChampions(data) {
+            if (!data.length) return;
+            const latest = data[data.length - 1];
+            document.getElementById('currentChampionText').innerHTML = `<span style="color: #ff6b35;">${latest.champion}</span> won in ${latest.season}`;
+
+            const titleCount = {};
+            const appearanceCount = {};
+            data.forEach(item => {
+                titleCount[item.champion] = (titleCount[item.champion] || 0) + 1;
+                appearanceCount[item.champion] = (appearanceCount[item.champion] || 0) + 1;
+                appearanceCount[item.runner_up] = (appearanceCount[item.runner_up] || 0) + 1;
+            });
+
+            const sortedTitles = Object.entries(titleCount).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            document.getElementById('championsStats').innerHTML = `
+                <div class="col-md-3">
+                    <div class="summary-card">
+                        <h3>Total Seasons</h3>
+                        <p class="stat">${data.length}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="summary-card">
+                        <h3>Most Titles</h3>
+                        <p class="stat">${sortedTitles[0][1]}</p>
+                        <small>${sortedTitles[0][0]}</small>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('championsTableBody').innerHTML = data.reverse().map(item => `
+                <tr>
+                    <td><strong>${item.season}</strong></td>
+                    <td><span class="badge badge-success-custom"><i class="fas fa-crown"></i> ${item.champion}</span></td>
+                    <td><span class="badge badge-secondary-custom">${item.runner_up}</span></td>
+                    <td>${item.finals_mvp || '-'}</td>
+                </tr>
+            `).join('');
+
+            const teams = sortedTitles.map(t => t[0]);
+            const titles = sortedTitles.map(t => t[1]);
+            Plotly.newPlot('titlesChart', [{
+                x: teams,
+                y: titles,
+                type: 'bar',
+                marker: { color: '#007bff' }
+            }], { responsive: true });
+
+            const appearNames = Object.keys(appearanceCount).sort((a, b) => appearanceCount[b] - appearanceCount[a]).slice(0, 5);
+            const appears = appearNames.map(t => appearanceCount[t]);
+            Plotly.newPlot('finalsChart', [{
+                x: appearNames,
+                y: appears,
+                type: 'bar',
+                marker: { color: '#ffc107' }
+            }], { responsive: true });
+        }
+
+        // RANKINGS
+        function loadUnifiedRankings() {
+            fetch('/api/seasonal-rankings')
+                .then(r => r.json())
+                .then(data => {
+                    const select = document.getElementById('rankingSeasonSelect');
+                    select.innerHTML = '<option value="">Choose a season...</option>';
+                    Object.keys(data).forEach(season => {
+                        const opt = document.createElement('option');
+                        opt.value = season;
+                        opt.textContent = `Season ${season}`;
+                        select.appendChild(opt);
+                    });
+                });
+        }
+
+        function loadUnifiedSeason() {
+            const season = document.getElementById('rankingSeasonSelect').value;
+            if (!season) return;
+            fetch(`/api/seasonal-rankings?season=${season}`)
+                .then(r => r.json())
+                .then(data => {
+                    const batsmen = data.batsmen || [];
+                    const bowlers = data.bowlers || [];
+                    document.getElementById('rankBatsmenTable').querySelector('tbody').innerHTML = batsmen.map((p, i) => `
+                        <tr><td>${i+1}</td><td>${p.player}</td><td>${p.runs}</td></tr>
+                    `).join('');
+                    document.getElementById('rankBowlersTable').querySelector('tbody').innerHTML = bowlers.map((p, i) => `
+                        <tr><td>${i+1}</td><td>${p.player}</td><td>${p.wickets}</td></tr>
+                    `).join('');
+                });
+        }
+
+        // RECORDS
+        function loadUnifiedRecords() {
+            fetch('/api/player-records')
+                .then(r => r.json())
+                .then(data => displayRecords(data));
+        }
+
+        function displayRecords(data) {
+            const html = Object.entries(data).map(([category, records]) => `
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">${category}</div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                ${(records || []).slice(0, 10).map((r, i) => `
+                                    <li class="mb-2"><strong>${i+1}.</strong> ${r.player || r.name} - ${r.value}</li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('recordsContent').innerHTML = html;
+        }
+
+        // Event listeners
+        document.getElementById('compareSearch1')?.addEventListener('input', (e) => searchUnifiedPlayers(e.target.value, 0));
+        document.getElementById('compareSearch2')?.addEventListener('input', (e) => searchUnifiedPlayers(e.target.value, 1));
+
+        // Load dashboard on start
+        window.addEventListener('load', () => loadUnifiedDashboard());
+    </script>
+</body>
+</html>

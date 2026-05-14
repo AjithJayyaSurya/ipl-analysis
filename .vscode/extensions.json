@@ -1,0 +1,28 @@
+{
+    // ============================================================
+    // Recommended VS Code Extensions for this project
+    // VS Code will prompt you to install these automatically
+    // ============================================================
+    "recommendations": [
+        // Connect VS Code to WSL (Windows users MUST have this)
+        "ms-vscode-remote.remote-wsl",
+
+        // SQL / HiveQL syntax highlighting for .hql files
+        "mtxr.sqltools",
+
+        // View CSV output files with colored columns
+        "mechatroner.rainbow-csv",
+
+        // Shell script highlighting for .sh files
+        "timonwong.shellcheck",
+
+        // Highlight TODO comments in code
+        "gruntfuggly.todo-tree",
+
+        // Better file icons in explorer
+        "pkief.material-icon-theme",
+
+        // Git integration
+        "eamodio.gitlens"
+    ]
+}

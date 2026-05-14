@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>IPL Analytics Pro — 2008–2017</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════
+   CSS VARIABLES — DARK / LIGHT THEMES
+═══════════════════════════════════════════ */
+:root,[data-theme="dark"]{
+  --bg:#0f172a;--bg2:#1e293b;--bg3:#334155;
+  --card:#1e293b;--card2:#0f172a;
+  --border:#334155;--border2:#475569;
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;
+  --primary:#004BA0;--primary-light:#3b82f6;
+  --gold:#F5A623;--gold-light:#fbbf24;
+  --green:#10b981;--orange:#f59e0b;--red:#ef4444;
+  --glass:rgba(30,41,59,0.85);
+  --shadow:0 8px 32px rgba(0,0,0,.4);
+  --radius:12px;
+}
+[data-theme="light"]{
+  --bg:#f8fafc;--bg2:#ffffff;--bg3:#e2e8f0;
+  --card:#ffffff;--card2:#f1f5f9;
+  --border:#e2e8f0;--border2:#cbd5e1;
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --glass:rgba(255,255,255,0.9);
+  --shadow:0 4px 20px rgba(0,0,0,.1);
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background .3s,color .3s}
+a{color:var(--primary-light);text-decoration:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ═══════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════ */
+.navbar{background:var(--glass);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.75rem 0;position:sticky;top:0;z-index:500}
+.nav-inner{max-width:1400px;margin:0 auto;padding:0 1.5rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.logo{display:flex;align-items:center;gap:.5rem;font-size:1.2rem;font-weight:800;color:var(--text);white-space:nowrap}
+.logo .logo-icon{font-size:1.4rem}
+.logo .logo-gold{color:var(--gold)}
+.nav-links{display:flex;list-style:none;gap:.2rem;flex-wrap:wrap}
+.nav-links a{color:var(--text2);font-size:.82rem;font-weight:500;padding:.4rem .7rem;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-links a:hover,.nav-links a.active{color:var(--gold);background:rgba(245,166,35,.1)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.theme-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:.4rem .7rem;border-radius:8px;cursor:pointer;font-size:.85rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero{background:linear-gradient(135deg,#004BA0 0%,#1e3a8a 40%,#0f172a 100%);padding:3.5rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero-content{position:relative;max-width:700px;margin:0 auto}
+.hero h1{font-size:2.8rem;font-weight:900;color:#fff;margin-bottom:.5rem;letter-spacing:-1px}
+.hero h1 span{color:var(--gold)}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,.75);margin-bottom:.5rem}
+.hero-badge{display:inline-block;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.4);color:var(--gold);padding:.3rem .9rem;border-radius:20px;font-size:.8rem;font-weight:600;margin-top:.5rem}
+
+/* ═══════════════════════════════════════════
+   STAT STRIP
+═══════════════════════════════════════════ */
+.stat-strip{background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.5rem}
+.stat-strip-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.75rem}
+.stat-tile{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem 1rem;text-align:center;transition:transform .2s,box-shadow .2s;cursor:default}
+.stat-tile:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.stat-tile .st-icon{font-size:1.3rem;margin-bottom:.2rem}
+.stat-tile .st-val{font-size:1.6rem;font-weight:800;color:var(--gold);line-height:1}
+.stat-tile .st-label{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:.2rem}
+
+/* ═══════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════ */
+.main{max-width:1400px;margin:0 auto;padding:1.5rem}
+
+/* ═══════════════════════════════════════════
+   SECTION HEADER
+═══════════════════════════════════════════ */
+.section-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:1.2rem}
+.section-hdr h2{font-size:1.3rem;font-weight:700;color:var(--text)}
+.section-hdr .sh-icon{font-size:1.4rem}
+.section-hdr .sh-badge{background:var(--primary);color:#fff;font-size:.7rem;padding:.2rem .6rem;border-radius:10px;font-weight:600}
+
+/* ═══════════════════════════════════════════
+   TOP NAV TABS
+═══════════════════════════════════════════ */
+.top-tabs{display:flex;gap:.3rem;flex-wrap:wrap;border-bottom:2px solid var(--border);margin-bottom:0;padding-bottom:0}
+.ttab{padding:.6rem 1rem;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.85rem;color:var(--text2);font-weight:500;transition:all .2s;border-radius:6px 6px 0 0;white-space:nowrap}
+.ttab:hover{color:var(--text);background:var(--bg3)}
+.ttab.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:700}
+.top-tab-content{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:1.5rem}
+.tpane{display:none}
+.tpane.active{display:block}
+
+/* ═══════════════════════════════════════════
+   INNER TABS
+═══════════════════════════════════════════ */
+.itabs{display:flex;gap:.25rem;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.itab{padding:.45rem .85rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;font-size:.8rem;color:var(--text3);transition:all .2s;border-radius:4px 4px 0 0}
+.itab:hover{color:var(--text2)}
+.itab.active{color:var(--primary-light);border-bottom-color:var(--primary-light);font-weight:600}
+.ipane{display:none}
+.ipane.active{display:block}
+
+/* ═══════════════════════════════════════════
+   CARDS & GLASS
+═══════════════════════════════════════════ */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;transition:box-shadow .2s}
+.card:hover{box-shadow:var(--shadow)}
+.glass-card{background:var(--glass);backdrop-filter:blur(8px);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem}
+.card-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.card-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.card-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+
+/* ═══════════════════════════════════════════
+   TABLES
+═══════════════════════════════════════════ */
+.tbl-wrap{overflow-x:auto;margin-top:.8rem}
+table{width:100%;border-collapse:collapse;font-size:.83rem}
+thead tr{background:var(--bg3)}
+th{padding:.65rem .9rem;text-align:left;font-weight:600;color:var(--text2);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+td{padding:.55rem .9rem;border-bottom:1px solid var(--border);color:var(--text)}
+tbody tr:hover{background:var(--bg3)}
+.rank-num{color:var(--gold);font-weight:700;width:35px}
+.player-name{color:var(--primary-light);font-weight:600}
+.badge{display:inline-block;padding:.15rem .55rem;border-radius:8px;font-size:.72rem;font-weight:600}
+.badge-green{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.badge-blue{background:rgba(59,130,246,.15);color:var(--primary-light);border:1px solid rgba(59,130,246,.3)}
+.badge-gold{background:rgba(245,166,35,.15);color:var(--gold);border:1px solid rgba(245,166,35,.3)}
+.badge-red{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.badge-orange{background:rgba(245,158,11,.15);color:var(--orange);border:1px solid rgba(245,158,11,.3)}
+
+/* ═══════════════════════════════════════════
+   CHART BOX
+═══════════════════════════════════════════ */
+.chart-box{width:100%;min-height:380px}
+.chart-sm{width:100%;min-height:280px}
+
+/* ═══════════════════════════════════════════
+   PLAYER CARDS (Compare)
+═══════════════════════════════════════════ */
+.player-compare-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;border-top:3px solid var(--gold)}
+.pcc-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem}
+.pcc-avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden}
+.pcc-avatar img{width:100%;height:100%;object-fit:cover}
+.pcc-name{font-size:1rem;font-weight:700;color:var(--text)}
+.pcc-meta{font-size:.78rem;color:var(--text3);margin-top:.2rem}
+.stat-compare-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--border);font-size:.83rem}
+.stat-compare-row:last-child{border-bottom:none}
+.scr-label{color:var(--text3)}
+.scr-val{font-weight:600;color:var(--text)}
+.scr-val.better{color:var(--green)}
+
+/* ═══════════════════════════════════════════
+   SEARCH / AUTOCOMPLETE
+═══════════════════════════════════════════ */
+.search-wrap{position:relative}
+.search-wrap label{display:block;font-size:.75rem;font-weight:600;color:var(--text3);margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.5px}
+.search-wrap input{width:100%;padding:.6rem 1rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none;transition:border-color .2s}
+.search-wrap input:focus{border-color:var(--primary-light)}
+.ac-list{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:200;display:none}
+.ac-list.open{display:block}
+.ac-item{padding:.45rem 1rem;cursor:pointer;font-size:.85rem;color:var(--text2)}
+.ac-item:hover{background:var(--bg3);color:var(--text)}
+
+/* ═══════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════ */
+.btn{padding:.6rem 1.3rem;border:none;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;transition:all .2s}
+.btn-gold{background:var(--gold);color:#000}
+.btn-gold:hover{background:var(--gold-light);transform:translateY(-1px)}
+.btn-ghost{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ═══════════════════════════════════════════
+   RECORD HIGHLIGHTS
+═══════════════════════════════════════════ */
+.rec-hero{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.2rem}
+.rec-tile{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;text-align:center}
+.rec-tile .rt-icon{font-size:1.8rem;margin-bottom:.3rem}
+.rec-tile .rt-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--text3);margin-bottom:.3rem}
+.rec-tile .rt-val{font-size:2.2rem;font-weight:800;color:var(--gold);line-height:1}
+.rec-tile .rt-player{font-size:.82rem;color:var(--text2);margin-top:.3rem}
+
+/* ═══════════════════════════════════════════
+   CHAMPIONS
+═══════════════════════════════════════════ */
+.champ-hero{background:linear-gradient(135deg,#004BA0,#1e3a8a);border-radius:var(--radius);padding:2rem;text-align:center;margin-bottom:1.2rem}
+.champ-hero .trophy{font-size:3.5rem;margin-bottom:.5rem}
+.champ-hero .ch-latest{font-size:1.4rem;font-weight:700;color:var(--gold)}
+.champ-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.2rem}
+.cs-tile{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center}
+.cs-tile .csv{font-size:1.8rem;font-weight:800;color:var(--primary-light)}
+.cs-tile .csl{font-size:.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.cs-tile .css{font-size:.8rem;color:var(--gold);margin-top:.2rem;font-weight:600}
+
+/* ═══════════════════════════════════════════
+   BEST XI FIELD
+═══════════════════════════════════════════ */
+.xi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.75rem;margin-top:1rem}
+.xi-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:.9rem;text-align:center;transition:transform .2s,box-shadow .2s}
+.xi-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.xi-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:#fff;margin:0 auto .5rem}
+.xi-name{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.2rem}
+.xi-role{font-size:.72rem;color:var(--text3);margin-bottom:.3rem}
+.xi-score{font-size:.78rem;color:var(--gold);font-weight:600}
+
+/* ═══════════════════════════════════════════
+   LOADING SKELETON
+═══════════════════════════════════════════ */
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--border2) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px;height:20px;margin:.4rem 0}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ═══════════════════════════════════════════
+   SEASON FILTER BAR
+═══════════════════════════════════════════ */
+.filter-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem 1rem;margin-bottom:1rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.filter-bar label{font-size:.78rem;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.filter-bar select,.filter-bar input{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:.4rem .8rem;border-radius:6px;font-size:.85rem;outline:none}
+.filter-bar select:focus,.filter-bar input:focus{border-color:var(--primary-light)}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:900px){
+  .card-grid-2,.card-grid-3,.card-grid-4{grid-template-columns:1fr}
+  .rec-hero{grid-template-columns:1fr}
+  .champ-stats-row{grid-template-columns:1fr 1fr}
+  .hero h1{font-size:2rem}
+}
+@media(max-width:600px){
+  .hero h1{font-size:1.6rem}
+  .nav-links{display:none}
+  .champ-stats-row{grid-template-columns:1fr}
+  .ttab{font-size:.75rem;padding:.5rem .7rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAVBAR ═══════════ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <div class="logo"><span class="logo-icon">🏏</span> IPL <span class="logo-gold">Analytics</span> Pro</div>
+    <ul class="nav-links">
+      <li><a onclick="switchTop('dashboard')" id="nav-dashboard" class="active">📊 Dashboard</a></li>
+      <li><a onclick="switchTop('advanced')" id="nav-advanced">🔬 Advanced</a></li>
+      <li><a onclick="switchTop('compare')" id="nav-compare">⚖️ Compare</a></li>
+      <li><a onclick="switchTop('rankings')" id="nav-rankings">📅 Rankings</a></li>
+      <li><a onclick="switchTop('records')" id="nav-records">⭐ Records</a></li>
+      <li><a onclick="switchTop('champions')" id="nav-champions">🏆 Champions</a></li>
+      <li><a onclick="switchTop('bestxi')" id="nav-bestxi">🥇 Best XI</a></li>
+      <li><a onclick="switchTop('teams')" id="nav-teams">🛡 Teams</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">☀️ Light</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>IPL <span>Analytics</span> Pro</h1>
+    <p>Deep-dive cricket intelligence across 636 matches and 150,000+ deliveries</p>
+    <div class="hero-badge">📅 Season Coverage: 2008 – 2017</div>
+  </div>
+</section>
+
+<!-- ═══════════ STAT STRIP ═══════════ -->
+<div class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat-tile"><div class="st-icon">🏟</div><div class="st-val" id="s-matches">—</div><div class="st-label">Matches</div></div>
+    <div class="stat-tile"><div class="st-icon">🎯</div><div class="st-val" id="s-deliveries">—</div><div class="st-label">Deliveries</div></div>
+    <div class="stat-tile"><div class="st-icon">🏏</div><div class="st-val" id="s-batsmen">—</div><div class="st-label">Batsmen</div></div>
+    <div class="stat-tile"><div class="st-icon">🎳</div><div class="st-val" id="s-bowlers">—</div><div class="st-label">Bowlers</div></div>
+    <div class="stat-tile"><div class="st-icon">🛡</div><div class="st-val" id="s-teams">—</div><div class="st-label">Teams</div></div>
+    <div class="stat-tile"><div class="st-icon">📅</div><div class="st-val">10</div><div class="st-label">Seasons</div></div>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div class="main">
+
+  <!-- TOP TABS -->
+  <div class="top-tabs">
+    <button class="ttab active" data-top="dashboard" onclick="switchTop('dashboard')">📊 Dashboard</button>
+    <button class="ttab" data-top="advanced" onclick="switchTop('advanced')">🔬 Advanced Analytics</button>
+    <button class="ttab" data-top="compare" onclick="switchTop('compare')">⚖️ Compare Players</button>
+    <button class="ttab" data-top="rankings" onclick="switchTop('rankings')">📅 Season Rankings</button>
+    <button class="ttab" data-top="records" onclick="switchTop('records')">⭐ Records</button>
+    <button class="ttab" data-top="champions" onclick="switchTop('champions')">🏆 Champions</button>
+    <button class="ttab" data-top="bestxi" onclick="switchTop('bestxi')">🥇 Best XI</button>
+    <button class="ttab" data-top="teams" onclick="switchTop('teams')">🛡 Teams</button>
+  </div>
+
+  <div class="top-tab-content">
+
+    <!-- ══════════════════════════════════════
+         DASHBOARD PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-dashboard" class="tpane active">
+      <div class="itabs">
+        <button class="itab active" data-it="batsmen">🏏 Top Batsmen</button>
+        <button class="itab" data-it="bowlers">🎳 Top Bowlers</button>
+        <button class="itab" data-it="teams">🛡 Team Stats</button>
+        <button class="itab" data-it="phases">⚡ Phase Analysis</button>
+        <button class="itab" data-it="dismissals">🎯 Dismissals</button>
+        <button class="itab" data-it="fielders">🧤 Fielders</button>
+      </div>
+      <div id="it-batsmen" class="ipane active"><div id="ch-batsmen" class="chart-box"></div><div class="tbl-wrap" id="tb-batsmen"></div></div>
+      <div id="it-bowlers" class="ipane"><div id="ch-bowlers" class="chart-box"></div><div class="tbl-wrap" id="tb-bowlers"></div></div>
+      <div id="it-teams" class="ipane"><div id="ch-teams" class="chart-box"></div><div class="tbl-wrap" id="tb-teams"></div></div>
+      <div id="it-phases" class="ipane"><div id="ch-phases" class="chart-box"></div><div class="tbl-wrap" id="tb-phases"></div></div>
+      <div id="it-dismissals" class="ipane"><div id="ch-dismissals" class="chart-box"></div><div class="tbl-wrap" id="tb-dismissals"></div></div>
+      <div id="it-fielders" class="ipane"><div id="ch-fielders" class="chart-box"></div><div class="tbl-wrap" id="tb-fielders"></div></div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         ADVANCED ANALYTICS PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-advanced" class="tpane">
+      <div class="itabs">
+        <button class="itab active" data-it="adv-playoff">🏆 Playoff Scorers</button>
+        <button class="itab" data-it="adv-consistency">📈 Bat Consistency</button>
+        <button class="itab" data-it="adv-bconsistency">🎳 Bowl Consistency</button>
+        <button class="itab" data-it="adv-partnership">🤝 Partnerships</button>
+        <button class="itab" data-it="adv-phase">⚡ Phase Specialists</button>
+        <button class="itab" data-it="adv-spinfast">🌀 Spin vs Fast</button>
+        <button class="itab" data-it="adv-age">📊 Age Curves</button>
+        <button class="itab" data-it="adv-mvp">🥇 MVP / Season</button>
+        <button class="itab" data-it="adv-par">📉 Par Score</button>
+        <button class="itab" data-it="adv-venue">🏟 Venue Dominance</button>
+        <button class="itab" data-it="adv-toss">🪙 Toss Impact</button>
+        <button class="itab" data-it="adv-chase">🏃 Chase vs Defend</button>
+      </div>
+
+      <div id="it-adv-playoff" class="ipane active">
+        <div class="section-hdr"><span class="sh-icon">🏆</span><h2>Playoff Run Scorers</h2><span class="sh-badge">Last 4 matches/season</span></div>
+        <div id="ch-playoff" class="chart-box"></div><div class="tbl-wrap" id="tb-playoff"></div>
+      </div>
+      <div id="it-adv-consistency" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">📈</span><h2>Batsman Consistency Score</h2><span class="sh-badge">Std Dev + 30/50 frequency</span></div>
+        <div id="ch-bat-cons" class="chart-box"></div><div class="tbl-wrap" id="tb-bat-cons"></div>
+      </div>
+      <div id="it-adv-bconsistency" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">🎳</span><h2>Bowler Consistency Score</h2><span class="sh-badge">Economy variance + wickets/game</span></div>
+        <div id="ch-bowl-cons" class="chart-box"></div><div class="tbl-wrap" id="tb-bowl-cons"></div>
+      </div>
+      <div id="it-adv-partnership" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">🤝</span><h2>Best Batting Partnerships</h2></div>
+        <div id="ch-partner" class="chart-box"></div><div class="tbl-wrap" id="tb-partner"></div>
+      </div>
+      <div id="it-adv-phase" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">⚡</span><h2>Phase Specialist Rankings</h2></div>
+        <div class="itabs" style="margin-top:.5rem">
+          <button class="itab active" data-it="ph-pp-bat">🏏 PP Batsmen</button>
+          <button class="itab" data-it="ph-pp-bowl">🎳 PP Bowlers</button>
+          <button class="itab" data-it="ph-mid-bat">🏏 Middle Batsmen</button>
+          <button class="itab" data-it="ph-mid-bowl">🎳 Middle Bowlers</button>
+          <button class="itab" data-it="ph-death-bat">🏏 Death Batsmen</button>
+          <button class="itab" data-it="ph-death-bowl">🎳 Death Bowlers</button>
+        </div>
+        <div id="it-ph-pp-bat" class="ipane active"><div id="ch-pp-bat" class="chart-sm"></div><div class="tbl-wrap" id="tb-pp-bat"></div></div>
+        <div id="it-ph-pp-bowl" class="ipane"><div id="ch-pp-bowl" class="chart-sm"></div><div class="tbl-wrap" id="tb-pp-bowl"></div></div>
+        <div id="it-ph-mid-bat" class="ipane"><div id="ch-mid-bat" class="chart-sm"></div><div class="tbl-wrap" id="tb-mid-bat"></div></div>
+        <div id="it-ph-mid-bowl" class="ipane"><div id="ch-mid-bowl" class="chart-sm"></div><div class="tbl-wrap" id="tb-mid-bowl"></div></div>
+        <div id="it-ph-death-bat" class="ipane"><div id="ch-death-bat" class="chart-sm"></div><div class="tbl-wrap" id="tb-death-bat"></div></div>
+        <div id="it-ph-death-bowl" class="ipane"><div id="ch-death-bowl" class="chart-sm"></div><div class="tbl-wrap" id="tb-death-bowl"></div></div>
+      </div>
+      <div id="it-adv-spinfast" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">🌀</span><h2>Spinner vs Fast Bowler Leaderboard</h2></div>
+        <div class="card-grid-2">
+          <div class="card"><h3 style="color:var(--primary-light);margin-bottom:.8rem">🌀 Spinners</h3><div id="ch-spinners" class="chart-sm"></div><div class="tbl-wrap" id="tb-spinners"></div></div>
+          <div class="card"><h3 style="color:var(--orange);margin-bottom:.8rem">⚡ Fast Bowlers</h3><div id="ch-fast" class="chart-sm"></div><div class="tbl-wrap" id="tb-fast"></div></div>
+        </div>
+      </div>
+      <div id="it-adv-age" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">📊</span><h2>Age Performance Curves</h2></div>
+        <div class="card-grid-2">
+          <div class="card"><h3 style="margin-bottom:.8rem;color:var(--text2)">🏏 Age vs Strike Rate</h3><div id="ch-age-sr" class="chart-sm"></div></div>
+          <div class="card"><h3 style="margin-bottom:.8rem;color:var(--text2)">🎳 Age vs Economy Rate</h3><div id="ch-age-eco" class="chart-sm"></div></div>
+        </div>
+      </div>
+      <div id="it-adv-mvp" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">🥇</span><h2>MVP Per Season</h2><span class="sh-badge">Weighted formula</span></div>
+        <div id="ch-mvp" class="chart-box"></div><div class="tbl-wrap" id="tb-mvp"></div>
+      </div>
+      <div id="it-adv-par" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">📉</span><h2>Dynamic Par Score Evolution</h2></div>
+        <div id="ch-par" class="chart-box"></div><div class="tbl-wrap" id="tb-par"></div>
+      </div>
+      <div id="it-adv-venue" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">🏟</span><h2>Venue Batting vs Bowling Dominance</h2></div>
+        <div id="ch-venue-dom" class="chart-box"></div><div class="tbl-wrap" id="tb-venue-dom"></div>
+      </div>
+      <div id="it-adv-toss" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">🪙</span><h2>Toss Impact Analysis</h2></div>
+        <div id="toss-content"></div>
+      </div>
+      <div id="it-adv-chase" class="ipane">
+        <div class="section-hdr"><span class="sh-icon">🏃</span><h2>Chasing vs Defending Win %</h2></div>
+        <div id="ch-chase" class="chart-box"></div><div class="tbl-wrap" id="tb-chase"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         COMPARE PLAYERS PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-compare" class="tpane">
+      <div class="section-hdr"><span class="sh-icon">⚖️</span><h2>Compare Players</h2></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:1rem;align-items:end;margin-bottom:1.2rem">
+        <div class="search-wrap">
+          <label>Player 1</label>
+          <input type="text" id="p1-input" placeholder="Search player 1…" autocomplete="off" oninput="onSearch(this,'p1-ac','p1-val')">
+          <div class="ac-list" id="p1-ac"></div>
+          <input type="hidden" id="p1-val">
+        </div>
+        <div class="search-wrap">
+          <label>Player 2</label>
+          <input type="text" id="p2-input" placeholder="Search player 2…" autocomplete="off" oninput="onSearch(this,'p2-ac','p2-val')">
+          <div class="ac-list" id="p2-ac"></div>
+          <input type="hidden" id="p2-val">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <button class="btn btn-gold" onclick="doCompare()">Compare</button>
+          <button class="btn btn-ghost" onclick="resetCompare()">Reset</button>
+        </div>
+      </div>
+      <div id="cmp-error" style="color:var(--red);font-size:.85rem;margin-bottom:.8rem;display:none"></div>
+      <div id="cmp-result" style="display:none">
+        <div class="card-grid-2" id="cmp-cards"></div>
+        <div style="margin-top:1rem" id="ch-compare" class="chart-box"></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         RANKINGS PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-rankings" class="tpane">
+      <div class="section-hdr"><span class="sh-icon">📅</span><h2>IPL Seasonal Rankings</h2></div>
+      <div class="filter-bar">
+        <label>Season:</label>
+        <select id="season-sel" onchange="loadRankings()">
+          <option value="2017">2017</option><option value="2016">2016</option>
+          <option value="2015">2015</option><option value="2014">2014</option>
+          <option value="2013">2013</option><option value="2012">2012</option>
+          <option value="2011">2011</option><option value="2010">2010</option>
+          <option value="2009">2009</option><option value="2008">2008</option>
+        </select>
+      </div>
+      <div class="card-grid-2">
+        <div class="card"><h3 style="color:var(--primary-light);margin-bottom:.8rem">🏏 Top Batsmen</h3>
+          <table><thead><tr><th>Rank</th><th>Player</th><th>Runs</th><th>SR</th></tr></thead><tbody id="rank-bat"></tbody></table>
+        </div>
+        <div class="card"><h3 style="color:var(--orange);margin-bottom:.8rem">🎳 Top Bowlers</h3>
+          <table><thead><tr><th>Rank</th><th>Player</th><th>Wickets</th></tr></thead><tbody id="rank-bowl"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         RECORDS PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-records" class="tpane">
+      <div class="section-hdr"><span class="sh-icon">⭐</span><h2>IPL All-Time Records</h2></div>
+      <div class="rec-hero">
+        <div class="rec-tile"><div class="rt-icon">🔥</div><div class="rt-label">Highest Score</div><div class="rt-val" id="r-hi">—</div><div class="rt-player" id="r-hi-p">—</div></div>
+        <div class="rec-tile"><div class="rt-icon">💯</div><div class="rt-label">Most Centuries</div><div class="rt-val" id="r-100">—</div><div class="rt-player" id="r-100-p">—</div></div>
+        <div class="rec-tile"><div class="rt-icon">⚡</div><div class="rt-label">Most Wickets</div><div class="rt-val" id="r-wkt">—</div><div class="rt-player" id="r-wkt-p">—</div></div>
+      </div>
+      <div class="card-grid-2">
+        <div class="card"><h3 style="margin-bottom:.8rem">💯 Most Centuries</h3><div class="tbl-wrap"><table><thead><tr><th>Player</th><th>100s</th></tr></thead><tbody id="r-centuries"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-bottom:.8rem">⚡ Most Wickets</h3><div class="tbl-wrap"><table><thead><tr><th>Player</th><th>Wickets</th></tr></thead><tbody id="r-wickets"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-bottom:.8rem">💥 Most Sixes</h3><div class="tbl-wrap"><table><thead><tr><th>Player</th><th>Sixes</th></tr></thead><tbody id="r-sixes"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-bottom:.8rem">🧤 Most Catches</h3><div class="tbl-wrap"><table><thead><tr><th>Player</th><th>Catches</th></tr></thead><tbody id="r-catches"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-bottom:.8rem">🏏 Most Fifties</h3><div class="tbl-wrap"><table><thead><tr><th>Player</th><th>50s</th></tr></thead><tbody id="r-fifties"></tbody></table></div></div>
+        <div class="card"><h3 style="margin-bottom:.8rem">🔢 Most Fours</h3><div class="tbl-wrap"><table><thead><tr><th>Player</th><th>Fours</th></tr></thead><tbody id="r-fours"></tbody></table></div></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         CHAMPIONS PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-champions" class="tpane">
+      <div class="champ-hero"><div class="trophy">🏆</div><div class="ch-latest" id="ch-latest-txt">Loading…</div></div>
+      <div class="champ-stats-row">
+        <div class="cs-tile"><div class="csv" id="cs-seasons">—</div><div class="csl">Total Seasons</div></div>
+        <div class="cs-tile"><div class="csv" id="cs-titles">—</div><div class="csl">Most Titles</div><div class="css" id="cs-titles-team">—</div></div>
+        <div class="cs-tile"><div class="csv" id="cs-teams">—</div><div class="csl">Teams with Titles</div></div>
+        <div class="cs-tile"><div class="csv" id="cs-finals">—</div><div class="csl">Finals Appearances</div><div class="css" id="cs-finals-team">—</div></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:1rem">Season-wise Champions</h3>
+        <div class="tbl-wrap"><table><thead><tr><th>Season</th><th>🥇 Champion</th><th>🥈 Runner-up</th><th>⭐ Finals MVP</th></tr></thead><tbody id="champ-tbody"></tbody></table></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         BEST XI PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-bestxi" class="tpane">
+      <div class="section-hdr"><span class="sh-icon">🥇</span><h2>All-Time Best IPL XI</h2><span class="sh-badge">Algorithm-generated</span></div>
+      <div class="card" style="margin-bottom:1rem">
+        <p style="font-size:.83rem;color:var(--text3)">Selection criteria: min 10 matches · Batting score = runs/10 + (SR−100)/20 · Bowling score = wickets×20 − economy×2 · Roles from player metadata</p>
+      </div>
+      <div id="xi-container" class="xi-grid"></div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         TEAMS PANE
+    ══════════════════════════════════════ -->
+    <div id="pane-teams" class="tpane">
+      <div class="section-hdr"><span class="sh-icon">🛡</span><h2>Team Analytics</h2></div>
+      <div class="itabs">
+        <button class="itab active" data-it="tm-chase">🏃 Chase vs Defend</button>
+        <button class="itab" data-it="tm-toss">🪙 Toss Impact</button>
+        <button class="itab" data-it="tm-venue">🏟 Venue Stats</button>
+      </div>
+      <div id="it-tm-chase" class="ipane active"><div id="ch-tm-chase" class="chart-box"></div><div class="tbl-wrap" id="tb-tm-chase"></div></div>
+      <div id="it-tm-toss" class="ipane"><div id="toss-content2"></div></div>
+      <div id="it-tm-venue" class="ipane"><div id="ch-tm-venue" class="chart-box"></div><div class="tbl-wrap" id="tb-tm-venue"></div></div>
+    </div>
+
+  </div><!-- /top-tab-content -->
+</div><!-- /main -->
+
+<footer style="background:var(--bg2);border-top:1px solid var(--border);text-align:center;padding:1.2rem;font-size:.82rem;color:var(--text3);margin-top:2rem">
+  🏏 IPL Analytics Pro &nbsp;·&nbsp; Data: Kaggle IPL Dataset 2008–2017 &nbsp;·&nbsp; Built with Flask + Plotly
+</footer>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

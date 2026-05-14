@@ -1,0 +1,37 @@
+{
+    // ============================================================
+    // VS Code Settings for IPL Big Data Project
+    // Save this file as: .vscode/settings.json
+    // ============================================================
+
+    // Associate .hql files with SQL for syntax highlighting
+    "files.associations": {
+        "*.hql": "sql",
+        "*.pig": "python"
+    },
+
+    // Show file explorer clearly
+    "explorer.compactFolders": false,
+
+    // Terminal settings — use bash (WSL on Windows)
+    "terminal.integrated.defaultProfile.windows": "Ubuntu (WSL)",
+    "terminal.integrated.defaultProfile.linux":   "bash",
+    "terminal.integrated.fontSize": 14,
+
+    // CSV file settings (works with Rainbow CSV extension)
+    "rainbow_csv.enable_tooltip": true,
+    "rainbow_csv.enable_tooltip_column_names": true,
+
+    // SQL formatting settings
+    "sql.format.keywordCase": "upper",
+
+    // Editor settings
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on",
+    "editor.fontSize": 14,
+    "editor.renderLineHighlight": "all",
+
+    // Show whitespace
+    "editor.renderWhitespace": "boundary"
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Champions - IPL Analytics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🏏 IPL Analytics</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/compare">Compare Players</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/rankings">Rankings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/records">Records</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/champions">Champions</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">🏆 IPL Champions History</h1>
+
+        <!-- Trophy Display -->
+        <div class="text-center mb-5">
+            <div style="font-size: 120px; margin: 20px 0;">🏆</div>
+            <h2 id="currentChampion">Loading...</h2>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row mb-4" id="statsCards">
+            <!-- Dynamically loaded -->
+        </div>
+
+        <!-- Championship Table -->
+        <div class="card mb-4">
+            <div class="card-header"><h5>Season-wise Champions</h5></div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="championsTable">
+                        <thead>
+                            <tr>
+                                <th>Season</th>
+                                <th>🏅 Champion</th>
+                                <th>🥈 Runner-up</th>
+                                <th>⭐ Finals MVP</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Titles Chart -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Teams by Number of Titles</h5>
+                        <div id="titlesChart" style="height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Teams by Finals Appearances</h5>
+                        <div id="finalsChart" style="height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2024 IPL Big Data Analytics</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Fetch champions data
+        fetch('/api/ipl-champions')
+            .then(res => res.json())
+            .then(data => displayChampions(data))
+            .catch(err => console.error('Error:', err));
+
+        function displayChampions(data) {
+            // Get latest champion
+            const latestChamp = data[data.length - 1];
+            if (latestChamp) {
+                document.getElementById('currentChampion').innerHTML =
+                    `<span class="text-primary">${latestChamp.champion}</span> won in ${latestChamp.season}`;
+            }
+
+            // Count titles and appearances
+            const titleCount = {};
+            const appearanceCount = {};
+
+            data.forEach(item => {
+                const champ = item.champion;
+                const runnerUp = item.runner_up;
+
+                titleCount[champ] = (titleCount[champ] || 0) + 1;
+                appearanceCount[champ] = (appearanceCount[champ] || 0) + 1;
+                appearanceCount[runnerUp] = (appearanceCount[runnerUp] || 0) + 1;
+            });
+
+            // Sort by titles
+            const sortedTitles = Object.entries(titleCount)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            // Statistics cards
+            const statsHTML = `
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Total Seasons</h6>
+                            <h3>${data.length}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Most Titles</h6>
+                            <h3>${sortedTitles[0][1]}</h3>
+                            <p class="text-muted">${sortedTitles[0][0]}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Teams with Titles</h6>
+                            <h3>${Object.keys(titleCount).length}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h6>Finals Appearances</h6>
+                            <h3>${Object.keys(appearanceCount).length}</h3>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('statsCards').innerHTML = statsHTML;
+
+            // Fill table
+            const tableHTML = data.reverse().map(item => `
+                <tr>
+                    <td><strong>${item.season}</strong></td>
+                    <td><span class="badge bg-success">${item.champion}</span></td>
+                    <td><span class="badge bg-secondary">${item.runner_up}</span></td>
+                    <td>${item.finals_mvp || '-'}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tableBody').innerHTML = tableHTML;
+
+            // Charts
+            const teamNames = sortedTitles.map(t => t[0]);
+            const teamTitles = sortedTitles.map(t => t[1]);
+            const appearanceNames = Object.keys(appearanceCount).sort((a, b) => appearanceCount[b] - appearanceCount[a]).slice(0, 5);
+            const appearances = appearanceNames.map(t => appearanceCount[t]);
+
+            // Titles chart
+            Plotly.newPlot('titlesChart', [{
+                x: teamNames,
+                y: teamTitles,
+                type: 'bar',
+                marker: {color: '#007bff'}
+            }], {xaxis: {title: 'Team'}, yaxis: {title: 'Number of Titles'}});
+
+            // Finals chart
+            Plotly.newPlot('finalsChart', [{
+                x: appearanceNames,
+                y: appearances,
+                type: 'bar',
+                marker: {color: '#ffc107'}
+            }], {xaxis: {title: 'Team'}, yaxis: {title: 'Finals Appearances'}});
+        }
+    </script>
+</body>
+</html>

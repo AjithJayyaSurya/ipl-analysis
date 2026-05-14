@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Comparison - IPL Analytics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI'; background-color: #f8f9fa; }
+        .navbar { background: linear-gradient(135deg, #1a3a52 0%, #2d5f7f 100%); }
+        .team-card { background: white; padding: 1.5rem; border-radius: 10px; text-align: center; margin-bottom: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 4px solid #ff6b35; }
+        .team-name { font-size: 1.3rem; font-weight: bold; color: #1a3a52; }
+        .stat-label { color: #666; font-size: 0.9rem; margin-top: 1rem; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; color: #ff6b35; }
+        .chart-container { background: white; border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .section-title { font-size: 1.8rem; font-weight: bold; color: #1a3a52; margin: 2rem 0 1.5rem 0; }
+        .footer { background: #1a3a52; color: white; text-align: center; padding: 2rem; margin-top: 3rem; }
+        .team-select { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .team-btn { padding: 0.7rem 1.5rem; border: 2px solid #e8e8e8; border-radius: 8px; cursor: pointer; background: white; font-weight: 600; transition: all 0.3s; }
+        .team-btn.selected { background: #ff6b35; color: white; border-color: #ff6b35; }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">🏏 IPL Analytics</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/compare">Compare Players</a></li>
+                <li class="nav-item"><a class="nav-link" href="/team-comparison">Compare Teams</a></li>
+                <li class="nav-item"><a class="nav-link" href="/champions">Champions</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container" style="padding: 2rem 0;">
+    <h1 style="font-size: 2.5rem; font-weight: bold; color: #1a3a52; margin-bottom: 2rem;">
+        <i class="fas fa-shield-alt"></i> Team Comparison
+    </h1>
+
+    <!-- Team Selection -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Select Teams to Compare</h5>
+        </div>
+        <div class="card-body">
+            <div id="teamButtons" class="team-select"></div>
+            <button class="btn btn-primary" onclick="compareTeams()">
+                <i class="fas fa-arrow-right"></i> Compare
+            </button>
+            <button class="btn btn-secondary" onclick="resetComparison()">
+                <i class="fas fa-redo"></i> Reset
+            </button>
+        </div>
+    </div>
+
+    <!-- Comparison Results -->
+    <div id="comparisonResults" style="display: none;">
+        <!-- Team Stats Cards -->
+        <div class="row mb-4" id="teamCards"></div>
+
+        <!-- Comparison Chart -->
+        <div class="chart-container">
+            <h5>Win Rate Comparison</h5>
+            <div id="winRateChart" style="height: 350px;"></div>
+        </div>
+
+        <!-- Stats Table -->
+        <div class="card">
+            <div class="card-header"><h5>Detailed Comparison</h5></div>
+            <div class="card-body">
+                <table class="table table-hover" id="comparisonTable">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th id="team1Head">Team 1</th>
+                            <th id="team2Head">Team 2</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2024 IPL Big Data Analytics | Team Comparison</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const teams = [
+        'Mumbai Indians', 'Chennai Super Kings', 'Royal Challengers Bangalore',
+        'Kolkata Knight Riders', 'Sunrisers Hyderabad', 'Delhi Capitals',
+        'Rajasthan Royals', 'Punjab Kings'
+    ];
+
+    let selectedTeams = [];
+
+    function initTeamButtons() {
+        const teamButtonsHtml = teams.map(team => `
+            <button class="team-btn" onclick="toggleTeam('${team}')" id="btn_${team}">
+                ${team}
+            </button>
+        `).join('');
+        document.getElementById('teamButtons').innerHTML = teamButtonsHtml;
+    }
+
+    function toggleTeam(teamName) {
+        const index = selectedTeams.indexOf(teamName);
+        if (index > -1) {
+            selectedTeams.splice(index, 1);
+        } else {
+            if (selectedTeams.length >= 2) {
+                alert('You can compare maximum 2 teams');
+                return;
+            }
+            selectedTeams.push(teamName);
+        }
+
+        // Update button styles
+        teams.forEach(team => {
+            const btn = document.getElementById(`btn_${team}`);
+            if (selectedTeams.includes(team)) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+    }
+
+    function compareTeams() {
+        if (selectedTeams.length < 2) {
+            alert('Please select 2 teams to compare');
+            return;
+        }
+
+        const teamParams = selectedTeams.map(t => `teams=${encodeURIComponent(t)}`).join('&');
+        fetch(`/api/compare-teams?${teamParams}`)
+            .then(res => res.json())
+            .then(data => displayComparison(data))
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Failed to load comparison data');
+            });
+    }
+
+    function displayComparison(data) {
+        if (!data || data.length < 2) {
+            alert('Failed to load comparison data');
+            return;
+        }
+
+        const team1 = data[0];
+        const team2 = data[1];
+
+        // Update headers
+        document.getElementById('team1Head').textContent = team1.team;
+        document.getElementById('team2Head').textContent = team2.team;
+
+        // Team cards
+        const cardsHtml = `
+            <div class="col-md-6">
+                <div class="team-card">
+                    <div class="team-name">${team1.team}</div>
+                    <div class="stat-label">Matches Played</div>
+                    <div class="stat-value">${team1.matches}</div>
+                    <div class="stat-label">Wins</div>
+                    <div class="stat-value">${team1.wins}</div>
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value">${team1.win_rate}%</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="team-card">
+                    <div class="team-name">${team2.team}</div>
+                    <div class="stat-label">Matches Played</div>
+                    <div class="stat-value">${team2.matches}</div>
+                    <div class="stat-label">Wins</div>
+                    <div class="stat-value">${team2.wins}</div>
+                    <div class="stat-label">Win Rate</div>
+                    <div class="stat-value">${team2.win_rate}%</div>
+                </div>
+            </div>
+        `;
+        document.getElementById('teamCards').innerHTML = cardsHtml;
+
+        // Win rate chart
+        Plotly.newPlot('winRateChart', [{
+            x: [team1.team, team2.team],
+            y: [team1.win_rate, team2.win_rate],
+            type: 'bar',
+            marker: { color: ['#007bff', '#28a745'] }
+        }], {
+            xaxis: { title: 'Team' },
+            yaxis: { title: 'Win Rate (%)' },
+            responsive: true
+        });
+
+        // Comparison table
+        const tableHtml = `
+            <tr><td>Total Matches</td><td>${team1.matches}</td><td>${team2.matches}</td></tr>
+            <tr><td>Total Wins</td><td>${team1.wins}</td><td>${team2.wins}</td></tr>
+            <tr><td>Total Losses</td><td>${team1.matches - team1.wins}</td><td>${team2.matches - team2.wins}</td></tr>
+            <tr><td>Win Rate</td><td>${team1.win_rate}%</td><td>${team2.win_rate}%</td></tr>
+        `;
+        document.getElementById('comparisonTable').querySelector('tbody').innerHTML = tableHtml;
+
+        document.getElementById('comparisonResults').style.display = 'block';
+        window.scrollTo(0, document.getElementById('comparisonResults').offsetTop - 100);
+    }
+
+    function resetComparison() {
+        selectedTeams = [];
+        teams.forEach(team => {
+            document.getElementById(`btn_${team}`).classList.remove('selected');
+        });
+        document.getElementById('comparisonResults').style.display = 'none';
+    }
+
+    // Initialize on page load
+    initTeamButtons();
+</script>
+
+</body>
+</html>

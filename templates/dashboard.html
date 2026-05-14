@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - IPL Analytics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">IPL Analytics</h1>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/dashboard" class="active">Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>IPL Dashboard</h1>
+
+        <!-- Summary Cards -->
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>Total Matches</h3>
+                <p id="total-matches" class="stat">Loading...</p>
+            </div>
+            <div class="summary-card">
+                <h3>Total Teams</h3>
+                <p id="total-teams" class="stat">Loading...</p>
+            </div>
+            <div class="summary-card">
+                <h3>Total Batsmen</h3>
+                <p id="total-batsmen" class="stat">Loading...</p>
+            </div>
+            <div class="summary-card">
+                <h3>Total Bowlers</h3>
+                <p id="total-bowlers" class="stat">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="batsmen">Top Batsmen</button>
+            <button class="tab-button" data-tab="bowlers">Top Bowlers</button>
+            <button class="tab-button" data-tab="teams">Team Stats</button>
+            <button class="tab-button" data-tab="phases">Phase Analysis</button>
+            <button class="tab-button" data-tab="dismissals">Dismissals</button>
+            <button class="tab-button" data-tab="fielders">Top Fielders</button>
+        </div>
+
+        <!-- Tab Contents -->
+        <div class="tab-content">
+            <!-- Batsmen Tab -->
+            <div id="batsmen-tab" class="tab-pane active">
+                <div id="batsmen-chart" style="height: 500px;"></div>
+                <div id="batsmen-table" class="data-table"></div>
+            </div>
+
+            <!-- Bowlers Tab -->
+            <div id="bowlers-tab" class="tab-pane">
+                <div id="bowlers-chart" style="height: 500px;"></div>
+                <div id="bowlers-table" class="data-table"></div>
+            </div>
+
+            <!-- Teams Tab -->
+            <div id="teams-tab" class="tab-pane">
+                <div id="teams-chart" style="height: 500px;"></div>
+                <div id="teams-table" class="data-table"></div>
+            </div>
+
+            <!-- Phases Tab -->
+            <div id="phases-tab" class="tab-pane">
+                <div id="phases-chart" style="height: 500px;"></div>
+                <div id="phases-table" class="data-table"></div>
+            </div>
+
+            <!-- Dismissals Tab -->
+            <div id="dismissals-tab" class="tab-pane">
+                <div id="dismissals-chart" style="height: 500px;"></div>
+                <div id="dismissals-table" class="data-table"></div>
+            </div>
+
+            <!-- Fielders Tab -->
+            <div id="fielders-tab" class="tab-pane">
+                <div id="fielders-chart" style="height: 500px;"></div>
+                <div id="fielders-table" class="data-table"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 IPL Big Data Analytics</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+batting_team,phase,runs_scored,balls_bowled,wickets_lost,run_rate
+Chennai Super Kings,Death,5926,3665,259,9.7
+Chennai Super Kings,Middle,8952,7179,268,7.48
+Chennai Super Kings,Powerplay,6012,4905,159,7.35
+Deccan Chargers,Death,3133,2103,198,8.94
+Deccan Chargers,Middle,4913,4112,177,7.17
+Deccan Chargers,Powerplay,3417,2819,109,7.27
+Delhi Daredevils,Death,5606,3696,295,9.1
+Delhi Daredevils,Middle,9682,7985,335,7.28
+Delhi Daredevils,Powerplay,6654,5498,245,7.26
+Gujarat Lions,Death,1159,787,64,8.84
+Gujarat Lions,Middle,2144,1654,80,7.78
+Gujarat Lions,Powerplay,1553,1117,44,8.34
+Kings XI Punjab,Death,6033,3990,337,9.07
+Kings XI Punjab,Middle,10181,8035,345,7.6
+Kings XI Punjab,Powerplay,6829,5558,230,7.37
+Kochi Tuskers Kerala,Death,390,305,36,7.67
+Kochi Tuskers Kerala,Middle,831,744,27,6.7
+Kochi Tuskers Kerala,Powerplay,680,533,23,7.65
+Kolkata Knight Riders,Death,5648,3702,303,9.15
+Kolkata Knight Riders,Middle,9562,7944,301,7.22
+Kolkata Knight Riders,Powerplay,6729,5570,223,7.25
+Mumbai Indians,Death,7097,4384,363,9.71
+Mumbai Indians,Middle,10478,8607,348,7.3
+Mumbai Indians,Powerplay,6935,5947,223,7.0
+Pune Warriors,Death,1733,1282,115,8.11
+Pune Warriors,Middle,2730,2481,107,6.6
+Pune Warriors,Powerplay,1895,1680,76,6.77
+Rajasthan Royals,Death,4520,3053,248,8.88
+Rajasthan Royals,Middle,8118,6479,294,7.52
+Rajasthan Royals,Powerplay,5030,4368,146,6.91
+Rising Pune Supergiant,Death,681,440,38,9.29
+Rising Pune Supergiant,Middle,1004,862,30,6.99
+Rising Pune Supergiant,Powerplay,785,598,22,7.88
+Rising Pune Supergiants,Death,530,324,27,9.81
+Rising Pune Supergiants,Middle,895,734,25,7.32
+Rising Pune Supergiants,Powerplay,638,522,16,7.33
+Royal Challengers Bangalore,Death,6535,3900,312,10.05
+Royal Challengers Bangalore,Middle,10273,8110,328,7.6
+Royal Challengers Bangalore,Powerplay,6598,5656,227,7.0
+Sunrisers Hyderabad,Death,3238,2106,172,9.23
+Sunrisers Hyderabad,Middle,4913,4114,154,7.17
+Sunrisers Hyderabad,Powerplay,3481,2831,95,7.38

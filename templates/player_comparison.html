@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Players - IPL Analytics</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🏏 IPL Analytics</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/compare">Compare Players</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/rankings">Rankings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/records">Records</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/champions">Champions</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="mb-4">⚖️ Compare Players</h1>
+
+        <!-- Player Selection -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>Select Players to Compare</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="text" id="playerSearch1" class="form-control" placeholder="Search player 1..." autocomplete="off">
+                        <div id="playerList1" class="list-group mt-2"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" id="playerSearch2" class="form-control" placeholder="Search player 2..." autocomplete="off">
+                        <div id="playerList2" class="list-group mt-2"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary w-100 mt-3" onclick="compareSelectedPlayers()">
+                            Compare
+                        </button>
+                        <button class="btn btn-secondary w-100 mt-2" onclick="resetComparison()">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Results -->
+        <div id="comparisonResults" style="display:none;">
+            <!-- Player Cards -->
+            <div class="row mb-4" id="playerCards">
+                <!-- Dynamically loaded -->
+            </div>
+
+            <!-- Stats Comparison Table -->
+            <div class="card mb-4">
+                <div class="card-header"><h5>Career Statistics Comparison</h5></div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th id="player1Header">Player 1</th>
+                                <th id="player2Header">Player 2</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statsTable">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Head-to-Head -->
+            <div class="card mb-4">
+                <div class="card-header"><h5>Head-to-Head Stats</h5></div>
+                <div class="card-body">
+                    <div id="h2hStats"></div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Runs Comparison</h5>
+                            <div id="runsChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Strike Rate Comparison</h5>
+                            <div id="srChart" style="height: 300px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <p>&copy; 2024 IPL Big Data Analytics</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedPlayers = ['', ''];
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialPlayer = urlParams.get('players');
+        if (initialPlayer) selectedPlayers[0] = initialPlayer;
+
+        // Search players
+        function searchPlayers(query, playerIndex) {
+            if (query.length < 2) return;
+
+            fetch(`/api/player-search?q=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => displaySearchResults(data, playerIndex))
+                .catch(err => console.error('Error:', err));
+        }
+
+        function displaySearchResults(players, playerIndex) {
+            const listId = playerIndex === 0 ? 'playerList1' : 'playerList2';
+            const listElement = document.getElementById(listId);
+            listElement.innerHTML = '';
+
+            players.forEach(player => {
+                const item = document.createElement('a');
+                item.href = '#';
+                item.className = 'list-group-item list-group-item-action';
+                item.textContent = `${player.name} (${player.current_team})`;
+                item.onclick = (e) => {
+                    e.preventDefault();
+                    selectPlayer(player.name, playerIndex);
+                };
+                listElement.appendChild(item);
+            });
+        }
+
+        function selectPlayer(playerName, playerIndex) {
+            selectedPlayers[playerIndex] = playerName;
+            const inputId = playerIndex === 0 ? 'playerSearch1' : 'playerSearch2';
+            document.getElementById(inputId).value = playerName;
+            const listId = playerIndex === 0 ? 'playerList1' : 'playerList2';
+            document.getElementById(listId).innerHTML = '';
+        }
+
+        function compareSelectedPlayers() {
+            if (!selectedPlayers[0] || !selectedPlayers[1]) {
+                alert('Please select both players');
+                return;
+            }
+
+            const p1 = selectedPlayers[0];
+            const p2 = selectedPlayers[1];
+
+            Promise.all([
+                fetch(`/api/player/${encodeURIComponent(p1)}`).then(r => r.json()),
+                fetch(`/api/player/${encodeURIComponent(p2)}`).then(r => r.json()),
+                fetch(`/api/player-head-to-head?player1=${encodeURIComponent(p1)}&player2=${encodeURIComponent(p2)}`).then(r => r.json())
+            ]).then(([data1, data2, h2hData]) => {
+                displayComparison(p1, data1, p2, data2, h2hData);
+                document.getElementById('comparisonResults').style.display = 'block';
+                window.scrollTo(0, document.getElementById('comparisonResults').offsetTop);
+            });
+        }
+
+        function displayComparison(p1Name, p1Data, p2Name, p2Data, h2hData) {
+            // Player headers
+            document.getElementById('player1Header').textContent = p1Name;
+            document.getElementById('player2Header').textContent = p2Name;
+
+            // Player cards
+            const cardsHTML = `
+                <div class="col-md-6">
+                    <div class="card">
+                        <img src="${p1Data.image_url}" class="card-img-top" style="height: 300px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5>${p1Name}</h5>
+                            <p class="text-muted">${p1Data.role} • ${p1Data.nationality}</p>
+                            <p class="text-success"><strong>${p1Data.current_team}</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <img src="${p2Data.image_url}" class="card-img-top" style="height: 300px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5>${p2Name}</h5>
+                            <p class="text-muted">${p2Data.role} • ${p2Data.nationality}</p>
+                            <p class="text-success"><strong>${p2Data.current_team}</strong></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('playerCards').innerHTML = cardsHTML;
+
+            // Stats table
+            const b1 = p1Data.career_stats?.batting || {};
+            const b2 = p2Data.career_stats?.batting || {};
+            const bo1 = p1Data.career_stats?.bowling || {};
+            const bo2 = p2Data.career_stats?.bowling || {};
+
+            const highlight = (val1, val2) => val1 > val2 ? 'font-weight-bold' : '';
+
+            const statsHTML = `
+                <tr><td>Total Runs</td><td class="${highlight(b1.total_runs, b2.total_runs)}">${b1.total_runs || 0}</td><td>${b2.total_runs || 0}</td></tr>
+                <tr><td>Strike Rate</td><td class="${highlight(b1.strike_rate, b2.strike_rate)}">${(b1.strike_rate || 0).toFixed(2)}</td><td>${(b2.strike_rate || 0).toFixed(2)}</td></tr>
+                <tr><td>Centuries</td><td class="${highlight(b1.centuries, b2.centuries)}">${b1.centuries || 0}</td><td>${b2.centuries || 0}</td></tr>
+                <tr><td>Total Wickets</td><td class="${highlight(bo1.total_wickets, bo2.total_wickets)}">${bo1.total_wickets || 0}</td><td>${bo2.total_wickets || 0}</td></tr>
+                <tr><td>Economy Rate</td><td class="${highlight(bo2.economy, bo1.economy)}">${(bo1.economy || 0).toFixed(2)}</td><td>${(bo2.economy || 0).toFixed(2)}</td></tr>
+            `;
+            document.getElementById('statsTable').innerHTML = statsHTML;
+
+            // H2H stats
+            const h2hHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>${p1Name}</strong></p>
+                        <p>Runs in common matches: <strong>${h2hData[p1Name]?.runs || 0}</strong></p>
+                        <p>Dismissals: <strong>${h2hData[p1Name]?.dismissals || 0}</strong></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>${p2Name}</strong></p>
+                        <p>Runs in common matches: <strong>${h2hData[p2Name]?.runs || 0}</strong></p>
+                        <p>Dismissals: <strong>${h2hData[p2Name]?.dismissals || 0}</strong></p>
+                    </div>
+                </div>
+                <p class="alert alert-info">Common matches: ${h2hData.common_matches || 0}</p>
+            `;
+            document.getElementById('h2hStats').innerHTML = h2hHTML;
+
+            // Charts
+            const playerNames = [p1Name, p2Name];
+            const runs = [b1.total_runs || 0, b2.total_runs || 0];
+            const sr = [b1.strike_rate || 0, b2.strike_rate || 0];
+
+            Plotly.newPlot('runsChart', [
+                {x: playerNames, y: runs, type: 'bar', marker: {color: ['#007bff', '#28a745']}}
+            ], {});
+
+            Plotly.newPlot('srChart', [
+                {x: playerNames, y: sr, type: 'bar', marker: {color: ['#ffc107', '#dc3545']}}
+            ], {});
+        }
+
+        function resetComparison() {
+            selectedPlayers = ['', ''];
+            document.getElementById('playerSearch1').value = '';
+            document.getElementById('playerSearch2').value = '';
+            document.getElementById('playerList1').innerHTML = '';
+            document.getElementById('playerList2').innerHTML = '';
+            document.getElementById('comparisonResults').style.display = 'none';
+        }
+
+        // Search event listeners
+        document.getElementById('playerSearch1').addEventListener('input', (e) => searchPlayers(e.target.value, 0));
+        document.getElementById('playerSearch2').addEventListener('input', (e) => searchPlayers(e.target.value, 1));
+    </script>
+</body>
+</html>
